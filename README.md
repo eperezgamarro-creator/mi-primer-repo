@@ -1,2 +1,2 @@
-# mi-primer-repo
-Repositorio de aprendizaje
+# Mi primer repositorio
+Estoy aprendiendo GitHub desde cero.
