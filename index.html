@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16262C">
+<title>Parte de incidencia — Almacén Montornès</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────
+   PARTE DE INCIDENCIA · Moldtrans Montornès
+   Sistema de diseño: "tira de etiquetas sobre acero"
+   ───────────────────────────────────────────── */
+:root{
+  --steel:      #16262C;   /* muelle, acero en penumbra */
+  --steel-2:    #1F343C;   /* superficie elevada */
+  --stock:      #EFE9DC;   /* papel de etiqueta térmica */
+  --stock-2:    #E1D9C6;   /* etiqueta, zona hundida */
+  --ink:        #141A1C;   /* tinta de impresión */
+  --ink-soft:   #5A6468;
+  --signal:     #F0A81C;   /* baliza de carretilla */
+  --stamp:      #B3372B;   /* tampón de incidencia */
+  --chalk:      #7E96A0;   /* metadatos sobre acero */
+
+  --gap: 18px;
+  --radius: 2px;
+  --tap: 52px;
+
+  --f-cond: "IBM Plex Sans Condensed", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--steel);
+  font-family:var(--f-cond);
+  color:var(--stock);
+  min-height:100dvh;
+  padding:0 0 max(28px,env(safe-area-inset-bottom));
+  overflow-x:hidden;
+}
+
+/* franja de peligro: único gesto decorativo del proyecto */
+.hazard{
+  height:7px;
+  background:repeating-linear-gradient(115deg,
+    var(--signal) 0 14px, var(--steel) 14px 28px);
+}
+
+/* ── Cabecera sobre acero ───────────────────── */
+.dock{
+  padding:22px 20px 26px;
+  max-width:640px;margin:0 auto;
+}
+.eyebrow{
+  font-family:var(--f-mono);
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--chalk);
+}
+.dock h1{
+  font-size:clamp(30px,9vw,44px);
+  font-weight:700;line-height:.94;letter-spacing:-.015em;
+  text-transform:uppercase;margin-top:8px;color:var(--stock);
+}
+.dock h1 em{font-style:normal;color:var(--signal);display:block}
+.dock p{
+  font-family:var(--f-mono);font-size:12.5px;line-height:1.55;
+  color:var(--chalk);margin-top:12px;max-width:44ch;
+}
+
+/* ── Tira de etiquetas ──────────────────────── */
+.strip{
+  max-width:640px;margin:0 auto;
+  background:var(--stock);color:var(--ink);
+  position:relative;
+  box-shadow:0 18px 44px rgba(0,0,0,.42);
+}
+/* dientes de sierra: borde superior e inferior de la tira */
+.strip::before,.strip::after{
+  content:"";position:absolute;left:0;right:0;height:9px;
+  background:
+    radial-gradient(circle at 6px 0, var(--steel) 5px, transparent 5.5px)
+    0 0/12px 9px repeat-x;
+}
+.strip::before{top:0}
+.strip::after{bottom:0;transform:rotate(180deg)}
+
+/* ── Bloque de encabezado del parte ─────────── */
+.masthead{padding:26px 20px 18px;border-bottom:2px solid var(--ink)}
+.masthead .ref{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:12px;
+}
+.ref-num{
+  font-family:var(--f-mono);font-weight:600;font-size:19px;letter-spacing:.02em;
+}
+.ref-num span{display:block;font-size:9.5px;letter-spacing:.2em;color:var(--ink-soft);font-weight:400;margin-bottom:3px}
+.ref-time{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft);text-align:right;line-height:1.5}
+
+/* firma del diseño: el código de barras que se imprime */
+.barcode{margin-top:20px}
+.bars{display:flex;align-items:flex-end;gap:2px;height:46px}
+.bars i{
+  display:block;flex:0 0 auto;height:100%;
+  background:var(--stock-2);
+  transition:background .32s ease;
+}
+.bars i.on{background:var(--ink)}
+.bars i.sig{background:var(--stock-2)}
+.bars i.sig.on{background:var(--signal)}
+.barcode-legend{
+  display:flex;justify-content:space-between;
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-soft);margin-top:9px;
+}
+.barcode-legend b{color:var(--ink);font-weight:600}
+
+/* ── Campos: casillas numeradas tipo CMR ────── */
+.field{
+  padding:22px 20px;
+  border-bottom:1px dashed #C3BAA5;
+  position:relative;
+}
+/* muescas de troquelado en cada separación */
+.field::after,.field::before{
+  content:"";position:absolute;bottom:-6px;width:11px;height:11px;
+  border-radius:50%;background:var(--steel);
+}
+.field::before{left:-6px}
+.field::after{right:-6px}
+.field:last-of-type{border-bottom:0}
+.field:last-of-type::before,.field:last-of-type::after{display:none}
+
+.field > label,.legend{
+  display:flex;align-items:baseline;gap:9px;
+  font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  margin-bottom:11px;
+}
+.box{
+  font-family:var(--f-mono);font-size:10.5px;font-weight:600;
+  color:var(--stock);background:var(--ink);
+  padding:3px 5px 2px;letter-spacing:.06em;flex:0 0 auto;
+}
+.opt{
+  margin-left:auto;font-family:var(--f-mono);font-size:10px;font-weight:400;
+  letter-spacing:.14em;color:var(--ink-soft);
+}
+.hint{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-soft);margin-top:9px;line-height:1.5}
+
+input[type=text],textarea{
+  width:100%;font-family:var(--f-mono);font-size:16px;color:var(--ink);
+  background:var(--stock-2);border:0;border-bottom:2px solid var(--ink);
+  border-radius:var(--radius);padding:14px 12px;min-height:var(--tap);
+  appearance:none;
+}
+input[type=text]::placeholder,textarea::placeholder{color:#9A9484}
+textarea{min-height:104px;resize:vertical;line-height:1.55}
+input:focus-visible,textarea:focus-visible,button:focus-visible,.chip:focus-visible{
+  outline:3px solid var(--signal);outline-offset:2px;
+}
+.uc{text-transform:uppercase}
+
+/* ── Tipo de incidencia: fichas con código ──── */
+.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.chip{
+  display:flex;flex-direction:column;justify-content:center;gap:3px;
+  min-height:var(--tap);padding:10px 12px;cursor:pointer;
+  background:var(--stock-2);border:2px solid transparent;border-radius:var(--radius);
+  transition:background .15s,border-color .15s;
+}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip code{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--ink-soft)}
+.chip span{font-size:14.5px;font-weight:600;letter-spacing:.02em;line-height:1.15}
+.chip:has(input:checked){background:var(--ink);border-color:var(--ink)}
+.chip:has(input:checked) span{color:var(--stock)}
+.chip:has(input:checked) code{color:var(--signal)}
+
+/* ── Chip de lectura NFC ────────────────────── */
+.nfc{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;background:var(--signal);color:var(--ink);
+  padding:4px 8px 3px;margin-bottom:10px;font-weight:600;
+}
+.nfc::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ink)}
+
+/* ── Fotos ──────────────────────────────────── */
+.shoot-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.shoot{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  width:100%;min-height:60px;cursor:pointer;padding:0 8px;
+  background:var(--ink);color:var(--stock);
+  font-family:var(--f-cond);font-size:15px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;
+  border:2px solid var(--ink);border-radius:var(--radius);
+}
+.shoot.alt{background:transparent;color:var(--ink)}
+.shoot svg{width:19px;height:19px;flex:0 0 auto}
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.shot{position:relative;aspect-ratio:3/4;background:var(--stock-2);overflow:hidden}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot b{
+  position:absolute;left:0;bottom:0;font-family:var(--f-mono);font-size:10px;
+  background:var(--ink);color:var(--stock);padding:2px 5px;letter-spacing:.1em;
+}
+.shot button{
+  position:absolute;top:0;right:0;width:30px;height:30px;border:0;cursor:pointer;
+  background:var(--stamp);color:#fff;font-size:17px;line-height:1;font-family:var(--f-mono);
+}
+
+/* ── Envío ──────────────────────────────────── */
+.send-zone{padding:22px 20px 30px;background:var(--stock);border-top:2px solid var(--ink)}
+.send{
+  width:100%;min-height:62px;cursor:pointer;border:0;border-radius:var(--radius);
+  background:var(--signal);color:var(--ink);
+  font-family:var(--f-cond);font-size:19px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.1em;
+  transition:filter .15s,transform .08s;
+}
+.send:active{transform:translateY(1px)}
+.send[disabled]{background:var(--stock-2);color:#9A9484;cursor:not-allowed}
+.send-note{
+  font-family:var(--f-mono);font-size:11.5px;color:var(--ink-soft);
+  text-align:center;margin-top:11px;line-height:1.55;
+}
+.alert{
+  font-family:var(--f-mono);font-size:12.5px;line-height:1.55;
+  background:var(--stamp);color:#fff;padding:13px 14px;margin-bottom:16px;
+}
+.alert b{display:block;font-family:var(--f-cond);font-size:15px;letter-spacing:.06em;
+  text-transform:uppercase;margin-bottom:4px}
+
+/* ── Sello de enviado ───────────────────────── */
+.done{padding:52px 24px 60px;text-align:center;max-width:640px;margin:0 auto}
+.mark{
+  display:inline-block;border:4px solid var(--stamp);color:var(--stamp);
+  padding:12px 22px 9px;transform:rotate(-4.5deg);
+  font-size:38px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  animation:slam .34s cubic-bezier(.2,1.5,.4,1) both;
+}
+@keyframes slam{from{transform:rotate(-4.5deg) scale(2.1);opacity:0}
+                to{transform:rotate(-4.5deg) scale(1);opacity:1}}
+.done h2{font-size:22px;text-transform:uppercase;letter-spacing:.05em;margin-top:26px}
+.done p{font-family:var(--f-mono);font-size:12.5px;color:var(--chalk);margin-top:10px;line-height:1.6}
+.done .again{
+  margin-top:30px;min-height:var(--tap);padding:0 26px;cursor:pointer;
+  background:transparent;color:var(--stock);border:2px solid var(--chalk);
+  font-family:var(--f-cond);font-size:15px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;border-radius:var(--radius);
+}
+.hidden{display:none !important}
+
+.footer{
+  max-width:640px;margin:0 auto;padding:20px;
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#4C6068;text-align:center;
+}
+
+@media (min-width:560px){
+  .chips{grid-template-columns:repeat(3,1fr)}
+  .field{padding:24px 28px}
+  .masthead,.send-zone{padding-left:28px;padding-right:28px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="hazard"></div>
+
+<header class="dock">
+  <div class="eyebrow">Moldtrans · Almacén Montornès</div>
+  <h1>Parte de<em>incidencia</em></h1>
+  <p>Rellena la tira, haz las fotos y envía. El parte llega a oficina en el momento, con las imágenes adjuntas.</p>
+</header>
+
+<!-- ══ FORMULARIO ══ -->
+<main class="strip" id="strip">
+
+  <section class="masthead">
+    <div class="ref">
+      <div class="ref-num"><span>PARTE Nº</span><b id="refNum">—</b></div>
+      <div class="ref-time"><span id="refDate">—</span><br><span id="refTime">—</span></div>
+    </div>
+
+    <div class="barcode">
+      <div class="bars" id="bars" aria-hidden="true"></div>
+      <div class="barcode-legend">
+        <span id="progressTxt">Parte sin empezar</span>
+        <b id="progressPct">0 %</b>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 -->
+  <div class="field">
+    <label for="operario"><i class="box">01</i>Operario</label>
+    <input type="text" id="operario" data-req name="operario" autocomplete="name" placeholder="Nombre y apellido">
+  </div>
+
+  <!-- 02 -->
+  <div class="field">
+    <label for="expedicion"><i class="box">02</i>Nº de expedición</label>
+    <input type="text" id="expedicion" data-req name="expedicion" class="uc" inputmode="text" autocomplete="off" placeholder="Ej. 25MON001234">
+  </div>
+
+  <!-- 03 -->
+  <fieldset class="field">
+    <div class="legend"><i class="box">03</i>Tipo de incidencia</div>
+    <div class="chips" id="chips">
+      <label class="chip"><input type="radio" name="tipo" value="Mercancía dañada" data-code="DAÑ" data-req
+        data-reserva="Se recibe mercancía con daños visibles. Se hace reserva por daños en el momento de la descarga."><code>DAÑ</code><span>Mercancía dañada</span></label>
+      <label class="chip"><input type="radio" name="tipo" value="Bultos faltantes" data-code="FAL"
+        data-reserva="Faltan bultos respecto a los indicados en el documento de transporte. Se hace reserva por falta de mercancía."><code>FAL</code><span>Bultos faltantes</span></label>
+      <label class="chip"><input type="radio" name="tipo" value="Bultos sobrantes" data-code="SOB"
+        data-reserva="Se reciben bultos de más respecto a los indicados en el documento de transporte. Se hace reserva por exceso de mercancía."><code>SOB</code><span>Bultos sobrantes</span></label>
+      <label class="chip"><input type="radio" name="tipo" value="Etiquetado erróneo" data-code="ETI"
+        data-reserva="Bultos con etiquetado erróneo o ilegible que impide su identificación. Se hace reserva."><code>ETI</code><span>Etiquetado erróneo</span></label>
+      <label class="chip"><input type="radio" name="tipo" value="Embalaje deficiente" data-code="EMB"
+        data-reserva="Embalaje insuficiente o deteriorado para las condiciones del transporte. Se hace reserva por estado del embalaje."><code>EMB</code><span>Embalaje deficiente</span></label>
+      <label class="chip"><input type="radio" name="tipo" value="Otra incidencia" data-code="OTR"
+        data-reserva=""><code>OTR</code><span>Otra</span></label>
+    </div>
+  </fieldset>
+
+  <!-- 04 -->
+  <div class="field">
+    <label for="ubicacion"><i class="box">04</i>Ubicación</label>
+    <div id="nfcChip" class="nfc hidden">Leído por NFC</div>
+    <input type="text" id="ubicacion" data-req name="ubicacion" class="uc" autocomplete="off" placeholder="Ej. B1WAL-05-12">
+    <div class="hint">Si has llegado tocando la etiqueta del pasillo, el código ya viene puesto. Corrígelo si no cuadra.</div>
+  </div>
+
+  <!-- 05 -->
+  <div class="field">
+    <label for="detalle"><i class="box">05</i>Detalle de posición<i class="opt">Opcional</i></label>
+    <input type="text" id="detalle" name="detalle" autocomplete="off" placeholder="Ej. altura 2, lado izquierdo">
+  </div>
+
+  <!-- 06 -->
+  <div class="field">
+    <label for="reserva"><i class="box">06</i>Reserva<i class="opt" id="reservaEstado">Se rellena sola</i></label>
+    <textarea id="reserva" data-req name="reserva" placeholder="Marca el tipo de incidencia y aquí aparecerá la reserva"></textarea>
+    <div class="hint">Texto estándar según el tipo marcado. Tócalo solo si este caso necesita algo distinto.</div>
+  </div>
+
+  <!-- 07 -->
+  <fieldset class="field">
+    <div class="legend"><i class="box">07</i>Fotos<i class="opt">Máx. 5</i></div>
+    <div class="shoot-row">
+      <button type="button" class="shoot" id="camBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Cámara
+      </button>
+      <button type="button" class="shoot alt" id="galBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Galería
+      </button>
+    </div>
+    <input type="file" id="camIn" accept="image/*" capture="environment" hidden>
+    <input type="file" id="galIn" accept="image/*" multiple hidden>
+    <div class="shots" id="shots"></div>
+    <div class="hint" id="shotsHint">Al menos una foto de la mercancía. Se comprimen solas antes de enviarse.</div>
+  </fieldset>
+
+  <!-- 08 -->
+  <div class="field">
+    <label for="observaciones"><i class="box">08</i>Observaciones<i class="opt">Opcional</i></label>
+    <textarea id="observaciones" name="observaciones" placeholder="Cualquier cosa que oficina deba saber"></textarea>
+  </div>
+
+  <div class="send-zone">
+    <div id="alertBox"></div>
+    <button type="button" class="send" id="sendBtn" disabled>Enviar parte</button>
+    <div class="send-note" id="sendNote">Completa los campos para poder enviar</div>
+  </div>
+</main>
+
+<!-- ══ CONFIRMACIÓN ══ -->
+<section class="done hidden" id="done">
+  <div class="mark">Enviado</div>
+  <h2>Parte <span id="doneRef"></span> en oficina</h2>
+  <p id="doneMeta"></p>
+  <button type="button" class="again" id="againBtn">Abrir otro parte</button>
+</section>
+
+<div class="footer">Moldtrans Montornès · Recepción</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   CONFIGURACIÓN
+   Ruta relativa: la función vive en el mismo
+   dominio y con el mismo HTTPS que esta página,
+   así que no hay CORS ni contenido mixto.
+   Para probar en local con "netlify dev" no hay
+   que cambiar nada.
+   ═══════════════════════════════════════════════ */
+const API = "/api/incidencias";
+
+const MAX_FOTOS = 5;
+const MAX_LADO  = 1500;      // px del lado mayor tras comprimir
+const CALIDAD   = 0.72;      // calidad JPEG de partida
+const PESO_MAX  = 850 * 1024; // tope por foto; si se pasa, recomprime
+
+/* ── Referencia y hora ───────────────────────── */
+const now = new Date();
+const pad = n => String(n).padStart(2,"0");
+const ref = "INC-" + String(now.getFullYear()).slice(2) + pad(now.getMonth()+1) + pad(now.getDate())
+          + "-" + String(Math.floor(Math.random()*900)+100);
+document.getElementById("refNum").textContent  = ref;
+document.getElementById("refDate").textContent = `${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()}`;
+document.getElementById("refTime").textContent = `${pad(now.getHours())}:${pad(now.getMinutes())} h`;
+
+/* ── Ubicación leída de la etiqueta NFC ──────── */
+const params = new URLSearchParams(location.search);
+const ubiNFC = params.get("ubicacion") || params.get("u");
+if (ubiNFC) {
+  document.getElementById("ubicacion").value = ubiNFC.toUpperCase();
+  document.getElementById("nfcChip").classList.remove("hidden");
+}
+
+/* ── Código de barras de progreso (firma) ────── */
+const BARS = [3,1,2,1,1,3,2,1,1,2,3,1,2,2,1,3,1,1,2,3,2,1,3,1,1,2,1,3,2,1,2,1,3,1,2,2,1,1,3,2];
+const barsEl = document.getElementById("bars");
+BARS.forEach((w,i) => {
+  const b = document.createElement("i");
+  b.style.width = (w*2) + "px";
+  b.style.height = (i % 7 === 0 ? 100 : 78) + "%";
+  if (i % 7 === 0) b.classList.add("sig");
+  barsEl.appendChild(b);
+});
+const barEls = [...barsEl.children];
+
+/* ── La ficha de tipo rellena la reserva ───── */
+const reservaEl = document.getElementById("reserva");
+const estadoEl  = document.getElementById("reservaEstado");
+let reservaTocada = false;
+
+reservaEl.addEventListener("input", ()=>{
+  reservaTocada = reservaEl.value.trim() !== "";
+  estadoEl.textContent = reservaTocada ? "Editada a mano" : "Se rellena sola";
+});
+
+document.querySelectorAll("input[name=tipo]").forEach(radio=>{
+  radio.addEventListener("change", ()=>{
+    if (reservaTocada) return;          // nunca pisamos lo escrito a mano
+    reservaEl.value = radio.dataset.reserva || "";
+    estadoEl.textContent = reservaEl.value ? "Texto propuesto" : "Escríbela tú";
+    refrescar();
+  });
+});
+
+/* ── Estado ──────────────────────────────────── */
+const fotos = [];
+const requeridos = () => [...document.querySelectorAll("[data-req]")];
+
+function completados(){
+  let hechos = 0, total = 0;
+  // campos de texto obligatorios
+  document.querySelectorAll("input[type=text][data-req], textarea[data-req]").forEach(el=>{
+    total++; if (el.value.trim()) hechos++;
+  });
+  // tipo de incidencia
+  total++; if (document.querySelector("input[name=tipo]:checked")) hechos++;
+  // al menos una foto
+  total++; if (fotos.length) hechos++;
+  return {hechos, total};
+}
+
+function refrescar(){
+  const {hechos,total} = completados();
+  const pct = Math.round(hechos/total*100);
+  const activas = Math.round(barEls.length * hechos/total);
+  barEls.forEach((b,i)=> b.classList.toggle("on", i < activas));
+
+  document.getElementById("progressPct").textContent = pct + " %";
+  const faltan = total - hechos;
+  document.getElementById("progressTxt").textContent =
+    hechos === 0 ? "Parte sin empezar"
+    : faltan === 0 ? "Parte completo"
+    : `Falta ${faltan} campo${faltan>1?"s":""}`;
+
+  const listo = faltan === 0;
+  const btn = document.getElementById("sendBtn");
+  btn.disabled = !listo;
+  document.getElementById("sendNote").textContent = listo
+    ? "Se enviará a oficina con " + fotos.length + " foto" + (fotos.length>1?"s":"")
+    : "Completa los campos para poder enviar";
+}
+
+document.addEventListener("input", refrescar);
+document.addEventListener("change", refrescar);
+
+/* ── Fotos: captura + compresión ─────────────── */
+const camIn = document.getElementById("camIn");
+const galIn = document.getElementById("galIn");
+document.getElementById("camBtn").addEventListener("click", ()=> camIn.click());
+document.getElementById("galBtn").addEventListener("click", ()=> galIn.click());
+
+async function recibirArchivos(e){
+  const libres = MAX_FOTOS - fotos.length;
+  const files = [...e.target.files].slice(0, libres);
+  if (!files.length){ aviso("Límite de fotos", `El parte admite ${MAX_FOTOS} fotos. Quita alguna para añadir otra.`); }
+  for (const f of files){
+    try { fotos.push(await comprimir(f)); }
+    catch { aviso("Foto no válida", "No se ha podido leer una de las imágenes. Repite la foto."); }
+  }
+  e.target.value = "";
+  pintarFotos(); refrescar();
+}
+camIn.addEventListener("change", recibirArchivos);
+galIn.addEventListener("change", recibirArchivos);
+
+function comprimir(file){
+  return new Promise((ok, ko)=>{
+    const fr = new FileReader();
+    fr.onerror = ko;
+    fr.onload = () => {
+      const img = new Image();
+      img.onerror = ko;
+      img.onload = () => {
+        const escala = Math.min(1, MAX_LADO / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width  = Math.round(img.width  * escala);
+        c.height = Math.round(img.height * escala);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+
+        // Baja calidad por pasos hasta entrar en el tope de peso.
+        let q = CALIDAD, dataUrl = c.toDataURL("image/jpeg", q);
+        while (dataUrl.length * 0.75 > PESO_MAX && q > 0.35){
+          q -= 0.1;
+          dataUrl = c.toDataURL("image/jpeg", q);
+        }
+        ok({ dataUrl });
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+
+function pintarFotos(){
+  const cont = document.getElementById("shots");
+  cont.innerHTML = "";
+  fotos.forEach((f,i)=>{
+    const d = document.createElement("div");
+    d.className = "shot";
+    d.innerHTML = `<img src="${f.dataUrl}" alt="Foto ${i+1} de la incidencia">
+                   <b>${pad(i+1)}</b>
+                   <button type="button" aria-label="Quitar foto ${i+1}">×</button>`;
+    d.querySelector("button").onclick = ()=>{ fotos.splice(i,1); pintarFotos(); refrescar(); };
+    cont.appendChild(d);
+  });
+  document.getElementById("shotsHint").textContent = fotos.length
+    ? `${fotos.length} de ${MAX_FOTOS} fotos`
+    : "Al menos una foto de la mercancía. Se comprimen solas antes de enviarse.";
+}
+
+/* ── Avisos ──────────────────────────────────── */
+function aviso(titulo, texto){
+  document.getElementById("alertBox").innerHTML =
+    `<div class="alert"><b>${titulo}</b>${texto}</div>`;
+  document.getElementById("alertBox").scrollIntoView({behavior:"smooth", block:"center"});
+}
+function limpiarAviso(){ document.getElementById("alertBox").innerHTML = ""; }
+
+/* ── Envío ───────────────────────────────────── */
+const sendBtn = document.getElementById("sendBtn");
+sendBtn.addEventListener("click", async ()=>{
+  limpiarAviso();
+  const tipo = document.querySelector("input[name=tipo]:checked");
+  const datos = {
+    referencia:    ref,
+    fecha:         now.toISOString(),
+    operario:      val("operario"),
+    expedicion:    val("expedicion").toUpperCase(),
+    tipo:          tipo.value,
+    codigo_tipo:   tipo.dataset.code,
+    ubicacion:     val("ubicacion").toUpperCase(),
+    ubicacion_nfc: !!ubiNFC,
+    detalle:       val("detalle"),
+    reserva:       val("reserva"),
+    observaciones: val("observaciones"),
+    fotos:         fotos.map(f => f.dataUrl)
+  };
+
+  sendBtn.disabled = true;
+  sendBtn.textContent = "Enviando…";
+  try{
+    const r = await fetch(API, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify(datos)
+    });
+    if(!r.ok){
+      let msg = "El servidor ha rechazado el parte.";
+      try { const j = await r.json(); if (j.error) msg = j.error; } catch {}
+      throw new Error(msg);
+    }
+    mostrarSello(datos);
+  }catch(err){
+    sendBtn.disabled = false;
+    sendBtn.textContent = "Reintentar envío";
+    const esRed = err.name === "TypeError";
+    aviso("El parte no ha salido", esRed
+      ? "El móvil se ha quedado sin conexión. Los datos y las fotos siguen aquí: acércate a una zona con cobertura y pulsa Reintentar."
+      : `${String(err.message).slice(0,300)}`);
+  }
+});
+
+const val = id => document.getElementById(id).value.trim();
+
+function mostrarSello(d){
+  document.getElementById("strip").classList.add("hidden");
+  document.querySelector(".dock").classList.add("hidden");
+  const done = document.getElementById("done");
+  document.getElementById("doneRef").textContent = d.referencia;
+  document.getElementById("doneMeta").textContent =
+    `${d.expedicion} · ${d.tipo} · ${d.ubicacion} · ${d.fotos.length} foto${d.fotos.length>1?"s":""}`;
+  done.classList.remove("hidden");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+document.getElementById("againBtn").addEventListener("click", ()=> location.reload());
+
+/* ── Comprobación del servidor al abrir ──────── */
+(async ()=>{
+  try{
+    const r = await fetch("/api/salud", {cache:"no-store"});
+    const j = await r.json();
+    if(!r.ok || !j.configurado) throw new Error();
+  }catch{
+    aviso("El envío no está disponible",
+      "Puedes rellenar el parte, pero ahora mismo no saldrá el correo. Avisa antes de seguir.");
+  }
+})();
+
+refrescar();
+</script>
+</body>
+</html>

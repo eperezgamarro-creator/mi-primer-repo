@@ -1,0 +1,10 @@
+{
+  "name": "incidencias-montornes",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Parte de incidencias del almacen de Montornes, abierto desde etiquetas NFC",
+  "dependencies": {
+    "nodemailer": "^6.9.14"
+  }
+}
