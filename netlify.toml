@@ -2,7 +2,7 @@
 
 [build]
   # El HTML está en la raíz del repositorio
-  publish = "."
+  publish = "public"
   functions = "netlify/functions"
 
 [functions]
