@@ -1,0 +1,21 @@
+# Configuración de Netlify — Parte de incidencias Montornès
+
+[build]
+  # El HTML está en la raíz del repositorio
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# La ruta /api/... la declara la propia función (export const config).
+# Este bloque solo es un respaldo por si usas una versión antigua de Netlify CLI.
+[[redirects]]
+  from = "/api/incidencias"
+  to = "/.netlify/functions/incidencias"
+  status = 200
+
+[[redirects]]
+  from = "/api/salud"
+  to = "/.netlify/functions/incidencias"
+  status = 200
