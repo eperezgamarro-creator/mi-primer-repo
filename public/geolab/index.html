@@ -11,64 +11,84 @@
  --accent:#13a8c7;--accent2:#0d7fa1;--good:#2f855a;--warn:#c07b17;--danger:#c53030;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.45}
 button,input{font:inherit}
 button{cursor:pointer}
 .app{max-width:1500px;margin:auto}
 header{background:linear-gradient(135deg,#102a43,#0b4f71 58%,#0d8aa4);color:white;padding:22px 24px 18px;position:sticky;top:0;z-index:20;box-shadow:0 4px 20px #102a4322}
 .head{display:flex;gap:18px;align-items:center;justify-content:space-between;max-width:1450px;margin:auto}
-h1{font-size:25px;margin:0 0 4px} .sub{opacity:.85;font-size:13px}
+h1{font-size:25px;margin:0 0 4px;line-height:1.2} .sub{opacity:.85;font-size:13px}
 .progress{min-width:230px;text-align:right} .bar{height:8px;background:#ffffff33;border-radius:99px;overflow:hidden;margin-top:7px} .bar>i{display:block;height:100%;background:#7de4ef;width:0%;transition:width 0.3s}
 nav{display:flex;gap:8px;overflow:auto;padding:10px 18px;background:white;border-bottom:1px solid var(--line);position:sticky;top:88px;z-index:15}
 nav button{border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 13px;border-radius:10px;white-space:nowrap;font-weight:700}
 nav button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
 main{padding:18px}
 .view{display:none} .view.active{display:block}
-.grid{display:grid;grid-template-columns:1.6fr .9fr;gap:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 2px 10px #102a4308}
-.card h2,.card h3{margin:0 0 10px} .small{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.6fr .9fr;gap:16px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 2px 10px #102a4308;margin-bottom:16px}
+.card h2,.card h3{margin:0 0 10px;line-height:1.25} .small{font-size:12px;color:var(--muted)}
+#detailCard{position:sticky;top:150px}
 .mapWrap{background:#061c29;border-radius:14px;overflow:hidden;position:relative;border:1px solid #15394c}
 .map{position:relative;width:100%;aspect-ratio:2/1;background:#08a7c6}
 .map svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 .map .land{fill:#e9dfc4;stroke:#9c8a62;stroke-width:.6}
 .map .line{stroke:#ffffff70;stroke-width:1;stroke-dasharray:4 5;fill:none}
 .map .lbl{fill:#ffffffcc;font-size:10px;font-weight:700}
-.map:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 78%,#061c2930);pointer-events:none}
 .eq{position:absolute;left:0;right:0;top:50%;border-top:2px dashed #ffffff99;z-index:2;pointer-events:none}
 .eq span{position:absolute;right:8px;top:3px;color:#fff;background:#102a43cc;padding:2px 6px;border-radius:5px;font-size:10px}
-.hotspot{position:absolute;transform:translate(-50%,-50%);z-index:4;width:18px;height:18px;padding:0;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px #0008;transition:.15s;cursor:pointer}
-.hotspot:hover,.hotspot:focus-visible,.hotspot.selected{width:25px;height:25px;box-shadow:0 0 0 5px #ffffff55,0 3px 12px #000a;outline:none}
-.legend{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
-.pill{border:1px solid var(--line);background:white;color:var(--ink);padding:6px 9px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer}
-.pill.active{background:var(--ink);color:white}
+.hotspot{position:absolute;transform:translate(-50%,-50%);z-index:4;width:15px;height:15px;padding:0;border-radius:50%;border:2px solid white;box-shadow:0 1px 5px #0009;transition:.15s;cursor:pointer}
+.hotspot:hover,.hotspot:focus-visible{width:21px;height:21px;z-index:6;outline:none}
+.hotspot.selected{width:21px;height:21px;z-index:5;box-shadow:0 0 0 4px #ffffffaa,0 3px 12px #000a}
+.map.hasSel .hotspot:not(.selected){opacity:.55}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer}
+.chip.active{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.chip.seen::after{content:"✓";color:var(--good)}
+.pill{border:1px solid var(--line);background:white;color:var(--ink);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.pill.active{background:var(--ink);color:white;border-color:var(--ink)}
 .filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
 .search{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;outline:none}
-.detailTitle{display:flex;gap:10px;align-items:center} .dot{width:14px;height:14px;border-radius:50%;display:inline-block;flex:none}
-.data{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.detailTitle{display:flex;gap:10px;align-items:center} .dot{width:13px;height:13px;border-radius:50%;display:inline-block;flex:none}
+.tag{display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:6px;background:#eef3f7;color:var(--muted);margin:8px 0 2px}
+.data{display:grid;gap:9px;margin-top:12px}
 .data div{background:#f6f9fb;border-radius:10px;padding:10px} .data b{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
 .key{background:#e9f8fb;border-left:4px solid var(--accent);padding:12px;border-radius:8px;margin-top:12px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
-.flash{min-height:210px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(145deg,#fff,#edf8fb);border:1px solid var(--line);border-radius:16px;padding:20px}
+.warnBox{background:#fff8e6;border-left:4px solid var(--warn);padding:12px;border-radius:8px;margin-top:10px}
+.flash{min-height:260px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(145deg,#fff,#edf8fb);border:1px solid var(--line);border-radius:16px;padding:20px}
 .flash .big{font-size:24px;font-weight:800;margin:10px 0}
+#flashDesc{max-width:700px;text-align:left}
+#flashDesc p{margin:6px 0}
 .btn{border:0;border-radius:10px;padding:10px 14px;background:var(--ink);color:white;font-weight:800;cursor:pointer}
-.btn.secondary{background:#e8f0f5;color:var(--ink)} .btn.good{background:var(--good)}
+.btn.secondary{background:#e8f0f5;color:var(--ink)}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;justify-content:center}
-.quizQ{font-size:18px;font-weight:800;line-height:1.3}
+.quizQ{font-size:18px;font-weight:800;line-height:1.3;margin-top:4px}
 .options{display:grid;gap:9px;margin-top:15px}
 .option{text-align:left;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:11px;padding:12px;font-weight:700;cursor:pointer}
 .option:disabled{cursor:default}
 .option.correct{border-color:var(--good);background:#edf9f1} .option.wrong{border-color:var(--danger);background:#fff0f0}
+.explain{margin-top:12px;font-size:14px;color:var(--muted)}
 .score{font-size:28px;font-weight:900}
-.contGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.contGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
 .cont{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}
-.cont h3{margin:0 0 8px}
+.cont h3{margin:0 0 8px;font-size:17px}
+.cont h4{margin:12px 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--accent2)}
+.cont p,.cont ul{margin:4px 0;font-size:14px}
+.cont ul{padding-left:18px}
+.cont li{margin:3px 0}
+.stat{display:inline-block;background:#e9f8fb;color:var(--accent2);font-weight:800;font-size:12px;padding:3px 8px;border-radius:6px;margin-bottom:6px}
 .vocab{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
-.term{background:#fff;border:1px solid var(--line);padding:12px;border-radius:12px}
-.term b{display:block;margin-bottom:4px}
-.notice{padding:11px 13px;background:#fff8e6;border:1px solid #f1d59c;border-radius:10px;color:#714c00;font-size:13px}
+.term{background:#fff;border:1px solid var(--line);padding:12px;border-radius:12px;font-size:14px}
+.term b{display:block;margin-bottom:4px;font-size:15px}
+.tableWrap{overflow-x:auto}
+table.scheme{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+table.scheme td,table.scheme th{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:middle}
+table.scheme th{background:#e9f8fb}
+table.scheme td.grp{font-weight:800;background:#f6f9fb}
+table.scheme td.bio{cursor:pointer}
+table.scheme td.bio:hover{background:#f0f7fb}
 .footer{padding:25px 5px 50px;color:var(--muted);font-size:12px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}.progress{display:none}header{position:relative}nav{top:0}main{padding:12px}}
-@media(max-width:620px){.data{grid-template-columns:1fr}h1{font-size:20px}.hotspot{width:16px;height:16px;border-width:2px}.map .lbl{display:none}}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.progress{display:none}header{position:relative}nav{top:0}main{padding:12px}#detailCard{position:static}}
+@media(max-width:620px){h1{font-size:20px}.hotspot{width:12px;height:12px}.hotspot.selected{width:17px;height:17px}.map .lbl{display:none}}
 </style>
 </head>
 <body>
@@ -76,7 +96,7 @@ main{padding:18px}
 <header>
  <div class="head">
   <div><h1>GeoLab · Unitat 1</h1><div class="sub">Ecosistemes · Biomes · Continents · Península Ibèrica · Catalunya</div></div>
-  <div class="progress"><span id="progressText">0 / 6 biomes explorats</span><div class="bar"><i id="progressBar"></i></div></div>
+  <div class="progress"><span id="progressText">0 biomes explorats</span><div class="bar"><i id="progressBar"></i></div></div>
  </div>
 </header>
 <nav id="nav">
@@ -90,13 +110,13 @@ main{padding:18px}
 </nav>
 
 <main>
-<!-- MAPA VIEW -->
+<!-- MAPA -->
 <section id="mapa" class="view active">
  <div class="grid">
   <div class="card">
    <h2>Mapa mundial dels biomes</h2>
-   <div class="small" style="margin-bottom:10px;">Selecciona un punt interactiu per analitzar les característiques del bioma.</div>
-   <input id="search" class="search" type="search" placeholder="Busca: taigà, desert, sabana, mediterrani...">
+   <div class="small" style="margin-bottom:10px;">Els biomes terrestres s'agrupen segons la latitud (temperatura i humitat). Fes clic en un punt o en el nom d'un bioma.</div>
+   <input id="search" class="search" type="search" placeholder="Busca: taigà, laurisilva, sabana, Monegros, Sàhara...">
    <div class="filters" id="filters"></div>
    <div class="mapWrap">
     <div class="map" id="map">
@@ -113,9 +133,9 @@ main{padding:18px}
       <text class="lbl" x="8" y="431">Cercle polar antàrtic</text>
      </svg>
      <div class="eq"><span>Equador (0°)</span></div>
-     <!-- Hotspots generats per JS -->
     </div>
    </div>
+   <div class="legend" id="legend"></div>
   </div>
 
   <div class="card" id="detailCard">
@@ -124,29 +144,35 @@ main{padding:18px}
     <h2 id="detailName" style="margin:0;">Selecciona un bioma</h2>
    </div>
    <div id="detailContent">
-    <p class="small">Fes clic en qualsevol marcador del mapa per veure el clima, la vegetació, la fauna i la ubicació detallada.</p>
+    <p class="small">Fes clic en qualsevol marcador del mapa per veure el clima, la vegetació, la fauna i on el trobem.</p>
+    <div class="key"><b>Recorda:</b> un bioma és un conjunt d'ecosistemes amb característiques comunes d'una zona de la Terra. Poden ser <b>terrestres</b> o <b>aquàtics</b>.</div>
    </div>
   </div>
  </div>
 </section>
 
-<!-- REPAS VIEW -->
+<!-- REPÀS -->
 <section id="repas" class="view">
  <div class="card">
-  <h2>Targetes de repàs interactiu (Flashcards)</h2>
+  <h2>Targetes de repàs (Flashcards)</h2>
+  <div class="filters" id="flashFilters"></div>
   <div class="flash">
    <div class="small" id="flashNum">Targeta 1</div>
+   <div class="tag" id="flashGroup"></div>
    <div class="big" id="flashTitle">Carregant...</div>
-   <div id="flashDesc" style="display:none; margin-top:10px; font-weight:600;"></div>
+   <div class="small" id="flashHint">Pensa: clima, vegetació, fauna i on es troba.</div>
+   <div id="flashDesc" style="display:none; margin-top:10px;"></div>
    <div class="actions">
+    <button class="btn secondary" id="btnPrev">Anterior</button>
     <button class="btn secondary" id="btnShow">Mostrar resposta</button>
     <button class="btn" id="btnNext">Següent targeta</button>
+    <button class="btn secondary" id="btnShuffle">Barrejar</button>
    </div>
   </div>
  </div>
 </section>
 
-<!-- QUIZ VIEW -->
+<!-- QUIZ -->
 <section id="quiz" class="view">
  <div class="card">
   <h2>Avaluació ràpida</h2>
@@ -154,185 +180,515 @@ main{padding:18px}
    <div class="small" id="quizNum"></div>
    <div class="quizQ" id="quizQuestion">Pregunta...</div>
    <div class="options" id="quizOptions"></div>
+   <div class="explain" id="quizExplain"></div>
+   <div class="actions" style="justify-content:flex-start"><button class="btn" id="btnQuizNext" style="display:none">Següent pregunta</button></div>
   </div>
   <div id="quizResult" style="display:none; text-align:center; padding:20px;">
    <div class="score" id="scoreText">0/0</div>
-   <p>Has completat el qüestionari d'avaluació.</p>
-   <button class="btn" id="btnRestart">Reiniciar Quiz</button>
+   <p id="scoreMsg">Has completat el qüestionari d'avaluació.</p>
+   <button class="btn" id="btnRestart">Nou quiz</button>
   </div>
  </div>
 </section>
 
-<!-- CONCEPTES VIEW -->
+<!-- CONCEPTES -->
 <section id="conceptes" class="view">
  <div class="card">
-  <h2>Vocabulari i Conceptes Clau</h2>
+  <h2>1. Els ecosistemes: funcionament i evolució</h2>
+  <p>Un <b>ecosistema</b> és una regió de la <b>biosfera</b> formada per la interrelació entre elements <b>biòtics</b> (els éssers vius) i <b>abiòtics</b> (el medi físic). La ciència que estudia aquesta interrelació és l'<b>ecologia</b>.</p>
   <div class="vocab">
-   <div class="term"><b>Bioma</b>Comunitat ecològica a gran escala definida per factors climàtics, de vegetació i fauna.</div>
-   <div class="term"><b>Bioclima</b>Interacció entre els factors climàtics i els éssers vius d'una regió.</div>
-   <div class="term"><b>Ecosistema</b>Sistema format per una comunitat d'éssers vius i el medi físic on s'interrelacionen.</div>
+   <div class="term"><b>Elements abiòtics</b>No vius: el <i>biòtop</i>.</div>
+   <div class="term"><b>Elements biòtics</b>Éssers vius: la <i>biocenosi</i>.</div>
+   <div class="term"><b>Elements antròpics</b>Creacions humanes. Junt amb els anteriors formen el <i>geosistema</i>, un sistema dinàmic.</div>
+   <div class="term"><b>Ecosistemes oberts</b>Són dependents i formen part d'una gran cadena: tot el planeta. El conjunt d'ecosistemes és la biosfera o ecosfera.</div>
+   <div class="term"><b>Factors condicionants</b>L'aigua, la temperatura, la lluminositat i el vent.</div>
+   <div class="term"><b>Successió ecològica</b>Quan la interrelació és òptima l'ecosistema arriba a la <b>maduresa</b> o <b>equilibri</b>; si es deteriora entra en <b>regressió</b>.</div>
+   <div class="term"><b>Vegetació potencial i actual</b>La potencial és la que hauria de tenir l'ecosistema; l'actual, la que realment té.</div>
+   <div class="term"><b>Acció antròpica</b>L'acció de l'ésser humà, que provoca l'alteració dels ecosistemes.</div>
+  </div>
+ </div>
+ <div class="card">
+  <h2>Esquema dels biomes</h2>
+  <div class="small" style="margin-bottom:8px">Fes clic en un bioma per veure'l al mapa.</div>
+  <div class="tableWrap"><table class="scheme" id="schemeTable"></table></div>
+ </div>
+ <div class="card">
+  <h2>Vocabulari</h2>
+  <div class="vocab">
+   <div class="term"><b>Biosfera</b>Capa més externa de l'escorça terrestre on es desenvolupa la vida.</div>
+   <div class="term"><b>Desertitzat</b>Territori convertit en un desert per raons naturals.</div>
+   <div class="term"><b>Desertificat</b>Territori convertit en un desert per raons antròpiques.</div>
+   <div class="term"><b>Durisilva o bosc escleròfil·le</b>Tipus de vegetació amb fulles dures i resistents.</div>
+   <div class="term"><b>Escala</b>Relació matemàtica entre les dimensions reals i les del dibuix que representa la realitat sobre un plànol o un mapa.</div>
+   <div class="term"><b>Latitud</b>Distància en graus des de qualsevol punt de la Terra a l'Equador. Pot ser nord o sud i va de 0º a 90º.</div>
+   <div class="term"><b>Longitud</b>Distància en graus des de qualsevol punt de la Terra al meridià 0 o de Greenwich. Pot ser est o oest i va de 0º a 180º.</div>
+   <div class="term"><b>Laurisilva</b>Bosc de fulla perenne propi del clima subtropical humit.</div>
+   <div class="term"><b>Lixiviació</b>Quan la part més superficial del sòl (l'horitzó superior) és rentada per una pluja abundant i s'empobreix.</div>
+   <div class="term"><b>Permafrost</b>Capa de sòl que es manté permanentment glaçada als biomes de clima fred.</div>
+   <div class="term"><b>Xeròfils</b>Plantes adaptades a climes molt secs i àrids.</div>
   </div>
  </div>
 </section>
 
-<!-- CONTINENTS VIEW -->
+<!-- CONTINENTS -->
 <section id="continents" class="view">
  <div class="card">
-  <h2>Distribució dels Biomes per Continents</h2>
+  <h2>Els continents</h2>
   <div class="contGrid">
-   <div class="cont"><h3>Àfrica</h3><p>Predomini de deserts (Sàhara) i sabanes tropicals.</p></div>
-   <div class="cont"><h3>Europa</h3><p>Bosc caducifoli, clima mediterrani i taigà al nord.</p></div>
-   <div class="cont"><h3>Amèrica</h3><p>Gran diversitat des de la tundra àrtica fins a la selva amazònica.</p></div>
+   <div class="cont">
+    <h3>Europa</h3><span class="stat">10.359.358 km²</span>
+    <p>Continent petit, però el segon quant a població.</p>
+    <h4>Relleu</h4>
+    <p>Configuració molt irregular: grans penínsules (Escandinava, Ibèrica, Itàlica) i illes (Islàndia, Illes Britàniques, Balears, Sardenya, Sicília, Creta). Banyada per l'oceà Glacial Àrtic, el mar del Nord, el Bàltic, el Caspi, el mar Negre, el Mediterrani i l'Atlàntic.</p>
+    <h4>Hidrografia</h4>
+    <ul><li>Riu més llarg: el <b>Volga</b> (desemboca al Caspi). Segon: el <b>Danubi</b> (mar Negre).</li><li>Mediterrani: Roine i Po. Atlàntic / mar del Nord: Loira, Sena, Rin, Elba. Bàltic: Oder i Vístula.</li><li>Llac d'aigua dolça més gran: el <b>Ladoga</b> (Rússia).</li></ul>
+    <h4>Biomes</h4>
+    <p>De clima fred i temperats. Al nord, tundra; a l'interior septentrional, boscos de coníferes; la gran planura, praderies. A la Mediterrània, temperat càlid; de Polònia cap a l'est, temperat fresc (continental).</p>
+    <h4>Fauna i recursos</h4>
+    <p>Cérvols, ants, llops i óssos (Escandinàvia, Rússia, Balcans); isard i íbex (Pirineus i Alps). Carbó (Regne Unit, Ruhr, Polònia...), ferro (Kiruna, Lorena, Ucraïna), petroli i gas (mar del Nord, Rússia).</p>
+   </div>
+   <div class="cont">
+    <h3>Àfrica</h3><span class="stat">30.304.445 km²</span>
+    <p>Tres vegades més gran que Europa. Separada d'Europa per l'estret de Gibraltar i unida a Àsia pel Sinaí. Dividida per l'Equador; costes poc retallades.</p>
+    <h4>Relleu</h4>
+    <p>Relleu pla: planes i cubetes amb altiplans. L'<b>Atlas</b> és una cadena jove (Marroc i Algèria). Cim més alt: el <b>Kilimanjaro</b> (5.893 m), volcànic, a Tanzània.</p>
+    <h4>Clima</h4>
+    <p>Molt regular, per la situació tropical i equatorial. Grans deserts: Sàhara i Kalahari.</p>
+    <h4>Xarxa fluvial</h4>
+    <ul><li>El <b>Nil</b> és el riu més llarg del món (6.671 km) i forma un gran delta al Mediterrani.</li><li>Senegal, Níger i Congo → Atlàntic; Zambezi i Limpopo → Índic.</li><li>Grans llacs: Victòria i Tanganyika; Txad (poc profund).</li></ul>
+   </div>
+   <div class="cont">
+    <h3>Àsia</h3><span class="stat">44.624.882 km²</span>
+    <p>Hi ha les terres més elevades i més enfonsades del món.</p>
+    <h4>Relleu</h4>
+    <ul><li>Serralades: de Turquia i el Caucas fins a Indoxina. L'<b>Himàlaia</b>, amb l'<b>Everest</b> (8.848 m), "el sostre del món". Pamir i Tian Shan cap a l'estret de Bering.</li><li>Planes: gran plana siberiana; valls del Tigris, Eufrates, Indus, Ganges, Mekong i Iangtsé.</li><li>Altiplans: Iran, Dècan, <b>Tibet</b> (el més alt, 4.000–5.000 m) i Mongòlia.</li></ul>
+    <h4>Xarxa fluvial</h4>
+    <p>Al nord, rius lents i regulars: Ienissei (4.750 km), Obi i Lena. A l'Àsia monsònica, rius de gran cabal amb deltes: Iangtsé, Ganges, Indus, Mekong.</p>
+    <h4>Clima</h4>
+    <p>Per la seva extensió té pràcticament tots els climes: càlids i freds, humits i secs.</p>
+   </div>
+   <div class="cont">
+    <h3>Amèrica</h3><span class="stat">39.937.064 km²</span>
+    <p>Tres grans unitats: Amèrica del Nord, Central i del Sud.</p>
+    <h4>Relleu</h4>
+    <ul><li>Muntanyes joves a l'oest: <b>Rocalloses</b> (McKinley, 6.194 m) i <b>Andes</b> (Aconcagua, 6.959 m). Cañón del Colorado i altiplans andins.</li><li>Massissos antics: Guaianes i Brasiler.</li><li>Planes: Mississipí-Missouri; Orinoco, Amazones i Paranà-Paraguai.</li></ul>
+    <h4>Xarxa fluvial</h4>
+    <p>Rius cap a l'Atlàntic. Grans conques: Amazones-Ucayali, Mississipí-Missouri, Plata-Paranà i Rio Bravo. Grans Llacs entre els EUA i el Canadà.</p>
+   </div>
+   <div class="cont">
+    <h3>Oceania</h3><span class="stat">8.945.712 km²</span>
+    <p>El continent més petit, format per multitud d'illes banyades pel Pacífic.</p>
+    <h4>Relleu i rius</h4>
+    <ul><li>Grans illes: Austràlia i Tasmània (7.700.000 km²), Nova Zelanda i Nova Guinea.</li><li>Austràlia: altiplà desèrtic a l'oest, gran plana al centre, Serralada Australiana a l'est. Rius secs cap al llac Eyre; només el Murray i el Darling són veritables rius.</li><li>Nova Zelanda i Nova Guinea: illes muntanyoses amb volcans.</li><li>Arxipèlags: Melanèsia, Micronèsia i Polinèsia (volcàniques o atols).</li></ul>
+   </div>
+   <div class="cont">
+    <h3>Antàrtida</h3><span class="stat">+13 milions km²</span>
+    <p>Al pol Nord només hi ha aigües gelades; el pol Sud està format per terres emergides: un autèntic continent, més gran que Europa.</p>
+    <p>Coberta per masses de gel d'entre 2.000 i 4.500 m d'altitud. És un gran <b>desert polar</b>.</p>
+   </div>
   </div>
  </div>
 </section>
 
-<!-- IBERIA VIEW -->
+<!-- PENÍNSULA IBÈRICA -->
 <section id="iberia" class="view">
  <div class="card">
-  <h2>Biomes a la Península Ibèrica</h2>
-  <p>Mosaic bioclimàtic dividit principalment entre l'Ibèria humida (bosc atlàntic/caducifoli) i l'Ibèria seca (bioma mediterrani).</p>
+  <h2>La Península Ibèrica</h2>
+  <div class="contGrid">
+   <div class="cont">
+    <h3>1. Situació</h3>
+    <ul><li>Entre els <b>44º i 36º de latitud nord</b>: zona temperada.</li><li>Entre els 10º de longitud oest i els 4º est.</li><li>Extrem sud-occidental d'Europa.</li><li>Zona de comunicació entre dos continents (Europa i Àfrica) i dos mars (Mediterrani i Atlàntic).</li></ul>
+    <h4>Característiques</h4>
+    <p>Península massissa i elevada, amb un altiplà central ("la Meseta"), de difícil accés, i unitats de relleu disposades al voltant de l'altiplà.</p>
+    <div class="key">El relleu i la posició generen dos grans escenaris: la <b>Ibèria seca</b> i la <b>Ibèria humida</b>.</div>
+   </div>
+   <div class="cont">
+    <h3>2. Relleu</h3>
+    <h4>Massís central ibèric</h4>
+    <p>Restes d'una cadena de l'era primària (600 m d'altura mitjana): Submeseta del Duero, Submeseta sud, Sistema Central (Somosierra, Guadarrama, Gredos...) i Montes de Toledo.</p>
+    <h4>Muntanyes circumdants</h4>
+    <p>Sierra Morena (recursos miners), Serralada Cantàbrica (Picos de Europa), Sistema Ibèric (Moncayo, Serranía de Cuenca, Maestrat) i Monts de Lleó.</p>
+    <h4>Sistemes exteriors</h4>
+    <p>Serralades Costeres Catalanes, Pirineus (Aneto, Mont Perdut, Puigmal), Massís Galaic, Monts Bascos i Serralades Bètiques (Sierra Nevada: <b>Mulhacén, 3.478 m</b>).</p>
+    <h4>Depressions</h4>
+    <p>De l'Ebre (molt tancada i àrida, regadiu), del Guadalquivir (oberta a l'Atlàntic) i del Sado-Tajo.</p>
+    <h4>Costes</h4>
+    <p>Cantàbrica (penya-segats i ries), Atlàntica (ries a Galícia; baixes i sorrenques al sud), Mediterrània (Albufera, Mar Menor, delta de l'Ebre).</p>
+   </div>
+   <div class="cont">
+    <h3>3. Regions biogeogràfiques</h3>
+    <h4>Eurosiberiana (Ibèria humida)</h4>
+    <p>Bosc caducifoli (faig i roure, amb falgueres i molses), landa (bruc i ginesta, degradació del bosc) i prats.</p>
+    <h4>Mediterrània (Ibèria seca)</h4>
+    <p>Bosc perennifoli (alzina, pi i surera) i matollar, amb arrels profundes i fulles escleròfil·les. Tres formacions de matollar: <b>màquia</b> (espessa), <b>garriga</b> (arbustos més petits) i <b>estepa</b> (sud-est, semiàrida).</p>
+    <h4>Macaronèsica</h4>
+    <p>Només a les illes Canàries: mediterrània amb influències africanes i atlàntiques, amb boscos de <b>laurisilva</b> (llorers).</p>
+    <div class="warnBox">Gran diversitat paisatgística: de les fagedes cantàbriques fins a l'aridesa del cap de Gata, la zona més àrida d'Europa. Sis factors: ecoclimàtic, relleu i sòls, propietat, cobertes vegetals, agricultura i urbanització.</div>
+   </div>
+   <div class="cont">
+    <h3>4. El clima peninsular</h3>
+    <h4>Factors condicionants</h4>
+    <ul><li><b>Anticicló de les Açores</b>: tap per als fronts atlàntics, sobretot a l'estiu.</li><li><b>Massa d'aire tropical saharià</b>: onades de xafogor a l'estiu.</li><li><b>Massa polar marina</b>: borrasques i pluges a la primavera i la tardor.</li><li><b>Massa polar continental i àrtica</b>: onades de fred a l'hivern.</li><li>Els mars (el Mediterrani suavitza) i l'altiplà central (l'altura).</li></ul>
+    <h4>Tipus de clima</h4>
+    <ul><li><b>Ibèria humida</b>: oceànic; precipitacions regulars, estius curts i frescos.</li><li><b>Ibèria seca</b>: mediterranis (Castella i vall de l'Ebre; Andalusia i Extremadura; litoral mediterrani) i la <b>Ibèria semiàrida</b> al sud-est.</li><li><b>Tropical</b>: Canàries i part de la Costa del Sol.</li><li><b>Alta muntanya</b>: l'altura és determinant (Pirineus).</li></ul>
+   </div>
+   <div class="cont">
+    <h3>5. Rius peninsulars</h3>
+    <p>Tres vessants, conques poc extenses, cabal escàs o molt variable i sense capacitat de navegació.</p>
+    <h4>Vessant cantàbric</h4>
+    <p>Curts i cabalosos, amb fort desnivell: Bidasoa, Nervión, Nalón, Eo.</p>
+    <h4>Vessant atlàntic</h4>
+    <p>Miño (Sil), Duero, Tajo, Guadiana (molt irregular, llacunes de Ruidera) i Guadalquivir (cabal regular, Genil).</p>
+    <h4>Vessant mediterrani</h4>
+    <p>Cabal escàs i irregular, amb sequeres i riuades a la tardor: Ter, Llobregat, <b>Ebre</b> (excepció: àmplia conca, gran cabal i delta), Xúquer i Segura.</p>
+   </div>
+  </div>
  </div>
 </section>
 
-<!-- CATALUNYA VIEW -->
+<!-- CATALUNYA -->
 <section id="catalunya" class="view">
  <div class="card">
-  <h2>Geografia Física i Biomes de Catalunya</h2>
-  <p>Alta variabilitat de paisatges en un territori reduït: des del clima alpí als Pirineus fins al clima mediterrani litoral i continental interior.</p>
+  <h2>Catalunya física</h2>
+  <p>Tres grans unitats de relleu: <b>els Pirineus</b>, <b>la Depressió Central</b> i <b>les Serralades Costaneres</b>. Unitats menors: la Serralada Transversal, la plana de l'Empordà i el delta de l'Ebre.</p>
+  <div class="contGrid">
+   <div class="cont">
+    <h3>Els Pirineus</h3>
+    <h4>Pirineu axial</h4>
+    <p>Part central i més alta. Aneto (3.404 m), Pica d'Estats (3.143 m), Puigmal, Canigó. Relleu abrupte d'origen glacial; marca la divisòria d'aigües.</p>
+    <h4>Prepirineus</h4>
+    <p>Serralades més baixes paral·leles a l'axial: Cadí (Pedraforca), Port del Comte, Montsec. Depressió Mitjana o prepirinenca (conca de Tremp).</p>
+   </div>
+   <div class="cont">
+    <h3>La Depressió Central</h3>
+    <p>Entre els Prepirineus i la Serralada Transversal: altiplans, més plans a l'oest. Plana de Vic, altiplans del Moianès i del Lluçanès, Pla de Bages, conca d'Òdena, Segarra, Garrigues, conca de Barberà, Plana d'Urgell i Pla de Lleida.</p>
+   </div>
+   <div class="cont">
+    <h3>Serralades Costaneres</h3>
+    <ul><li><b>Prelitoral</b>: Guilleries, Montseny, Sant Llorenç del Munt, Montserrat, Prades, Montsant, Ports de Beseit.</li><li><b>Litoral</b>: Gavarres, Collserola, Garraf.</li><li><b>Depressió Prelitoral</b>: la Selva, els Vallès, l'Alt i el Baix Penedès.</li><li><b>Plana litoral</b>: Maresme, Barcelonès i Baix Llobregat.</li></ul>
+   </div>
+   <div class="cont">
+    <h3>Unitats menors</h3>
+    <h4>Serralada Transversal</h4>
+    <p>Muntanyes de mitjana altitud on destaca el <b>vulcanisme</b> (Garrotxa: Santa Margarida, Croscat, Montsacopa). Altiplà de Cabrera, Puigsacalm i cubeta d'Olot.</p>
+    <h4>Plana de l'Empordà</h4>
+    <p>Antic golf emergit, amb aiguamolls. El Montgrí separa l'Alt i el Baix Empordà.</p>
+    <h4>Delta de l'Ebre</h4>
+    <p>Gran planura formada pels sediments del riu. En regressió per manca de sediments (pantans) i dinàmica litoral.</p>
+   </div>
+   <div class="cont">
+    <h3>El litoral català</h3>
+    <h4>Septentrional</h4>
+    <p>Cap de Creus (molt accidentat), golf de Roses, Costa Brava (de Begur a Blanes: cales i penya-segats), Maresme (platja sorrenca), deltes del Besòs i del Llobregat.</p>
+    <h4>Meridional</h4>
+    <p>Castelldefels i Garraf, Costa Daurada (de Calafell a Salou, baixa i sorrenca) i delta de l'Ebre (el Fangar i els Alfacs). El riu Sénia és el final.</p>
+   </div>
+   <div class="cont">
+    <h3>Les aigües</h3>
+    <p>Rius de traçat nord-sud, cabal escàs i irregular (clima mediterrani). Tots desemboquen a la Mediterrània excepte el <b>Garona</b> (Vall d'Aran → Atlàntic).</p>
+    <ul><li><b>Xarxa Pirineu-Ebre</b>: Segre (Valira, Noguera Pallaresa, Noguera Ribagorçana, Cinca) i l'Ebre, el més cabalós.</li><li><b>Xarxa Pirineu-Mediterrània</b>: Llobregat (Cardener), Ter (Freser, Onyar), Fluvià i Muga.</li><li><b>Xarxa Mediterrània</b>: rius curts de les Serralades Costaneres (Tordera, Besòs, Foix, Gaià, Francolí), amb riuades a la tardor.</li></ul>
+   </div>
+   <div class="cont">
+    <h3>Biomes a Catalunya</h3>
+    <ul><li><b>Bosc escleròfil·le mediterrani</b> (alzinars) a gran part del territori, i el seu matollar: màquia i garriga.</li><li><b>Estepa subtropical</b>: els Monegros, a la vall de l'Ebre.</li><li><b>Molleres</b>: deltes de l'Ebre i del Llobregat i aiguamolls de l'Empordà.</li><li>Clima d'<b>alta muntanya</b> als Pirineus.</li></ul>
+   </div>
+  </div>
  </div>
 </section>
 </main>
 
 <footer class="footer">
- <div style="text-align:center;">GeoLab · Recurs Educatiu Digital de Geografia Física</div>
+ <div style="text-align:center;">GeoLab · Recurs Educatiu Digital de Geografia Física · Basat en els apunts IOC, 1a Unitat</div>
 </footer>
 </div>
 
 <script>
-// Dades dels biomes
-// x/y en % sobre el mapa equirectangular: x = (longitud + 180) / 3.6, y = (90 - latitud) / 1.8
-const biomesData = [
- { id: 'tundra', name: 'Tundra', cat: 'fred', color: '#88d8b0', x: 22.2, y: 12.2, place: 'Nord del Canadà, Alaska, Sibèria', climate: 'Fred polar, precipitacions molt baixes', veg: 'Molses, líquens, herbes baixes', fauna: 'Rens, ossos polars, llops àrtics', desc: 'Subsòl congelat permanentment (permafrost).' },
- { id: 'taiga', name: 'Taigà (Bosc Boreal)', cat: 'fred', color: '#2e8b57', x: 66.7, y: 16.7, place: 'Rússia, Escandinàvia, Canadà', climate: 'Hiverns llargs i freds, estius curts', veg: 'Boscos de coníferes (pins, avets)', fauna: 'Ants, ossos bruns, llops', desc: 'El bioma terrestre més extens del planeta.' },
- { id: 'mediterrani', name: 'Bioma Mediterrani', cat: 'temperat', color: '#c07b17', x: 52.8, y: 27.8, place: 'Conca mediterrània, Califòrnia, Xile central', climate: 'Estius calents i secs, hiverns suaus', veg: 'Alzines, pins, boscos escleròfils', fauna: 'Senglars, aus migratòries, porcs espins', desc: 'Adaptat a la sequera estival.' },
- { id: 'sabana', name: 'Sabana Tropical', cat: 'calid', color: '#f39c12', x: 59.7, y: 51.7, place: 'Àfrica oriental (Serengeti), Brasil, nord d\'Austràlia', climate: 'Temperatures altes, estació seca i plujosa', veg: 'Herbes altes i acàcies aïllades', fauna: 'Lleons, girafes, elefants', desc: 'Gran concentració de grans herbívors.' },
- { id: 'desert', name: 'Desert Càlid', cat: 'calid', color: '#e74c3c', x: 52.8, y: 37.2, place: 'Sàhara, Aràbia, Austràlia central', climate: 'Precipitacions extremadament baixes, alta oscil·lació tèrmica', veg: 'Cactus, plantes xeròfites', fauna: 'Camells, rèptils, escorpins', desc: 'Manca de vegetació densa a causa de l\'aridesa.' },
- { id: 'selva', name: 'Selva Equatorial', cat: 'calid', color: '#13a8c7', x: 33.3, y: 51.7, place: 'Amazònia, conca del Congo, Indonèsia', climate: 'Càlid i humit tot l\'any', veg: 'Vegetació densa i estratificada', fauna: 'Jaguars, primats, aus exòtiques', desc: 'Màxima biodiversitat del planeta.' }
+// Grups de l'esquema dels biomes (apunts, pàg. 16)
+const groups = [
+ { id: 'freds', name: 'Biomes freds', parent: 'Biomes terrestres', color: '#3b6fd8' },
+ { id: 'fresc', name: 'Temperat fresc', parent: 'Biomes terrestres · temperats', color: '#2e8b57' },
+ { id: 'calid', name: 'Temperat càlid', parent: 'Biomes terrestres · temperats', color: '#c07b17' },
+ { id: 'tropic', name: 'Biomes intertropicals', parent: 'Biomes terrestres', color: '#d6453d' },
+ { id: 'salada', name: 'Aigua salada', parent: 'Biomes aquàtics', color: '#0b3d91' },
+ { id: 'dolca', name: 'Aigua dolça', parent: 'Biomes aquàtics', color: '#17b3a3' }
 ];
+const groupById = Object.fromEntries(groups.map(g => [g.id, g]));
 
-const catLabels = { tots: 'Tots', fred: 'Fred', temperat: 'Temperat', calid: 'Càlid' };
+// Biomes: pts = [latitud, longitud, lloc]
+const biomesData = [
+ // A. Biomes de clima fred
+ { id: 'taiga', g: 'freds', name: 'Taigà (bosc boreal)',
+   desc: 'Bioma de l\'hemisferi nord, entre els 50º i 70º de latitud N.',
+   f: { Clima: 'Molt fred però amb amplitud tèrmica: -40º a l\'hivern i 20º al curt estiu. Sòl glaçat quasi tot l\'any; per sota, sempre glaçat (permafrost).',
+        Vegetació: 'Bosc boreal de coníferes, arbres de fulla perennifòlia com els avets. Sotabosc molt pobre.',
+        Fauna: 'Adaptada al clima extrem: caribú, ant, llebre, llop.' },
+   place: 'Canadà, extrem nord-oest dels EUA, Escandinàvia i Rússia asiàtica (Sibèria).',
+   pts: [[56,-100,'Canadà'],[63,17,'Escandinàvia'],[60,100,'Sibèria']] },
+ { id: 'tundra', g: 'freds', name: 'Tundra',
+   desc: 'Es troba en una latitud superior a la taigà: més enllà dels 70º N.',
+   f: { Clima: 'Més rigorós que la taigà, amb un important permafrost i poca pluja (neu).',
+        Vegetació: 'Es limita a brucs, líquens i molses.',
+        Fauna: 'Petits rosegadors com la llebre, la guineu, el ren.' },
+   place: 'Nord d\'Escandinàvia, Sibèria, Alaska i Canadà. Població escassa: lapons a Escandinàvia i inuits a Alaska.',
+   pts: [[69,-152,'Alaska'],[71,100,'Nord de Sibèria']] },
+ { id: 'desertpolar', g: 'freds', name: 'Deserts polars',
+   desc: 'Pràcticament sense vegetació, en un clima de fred sever.',
+   f: { Clima: 'Fred extrem i poques precipitacions en forma de neu.',
+        Vegetació: 'La poca que hi ha són líquens i molses.',
+        Fauna: 'Més marina que terrestre: pingüins i foques.' },
+   place: 'L\'Antàrtida (hemisferi sud) i Groenlàndia (hemisferi nord).',
+   pts: [[74,-40,'Groenlàndia'],[-80,20,'Antàrtida']] },
+
+ // B. Biomes temperats · temperat fresc (nord)
+ { id: 'caducifoli', g: 'fresc', name: 'Bosc caducifoli',
+   desc: 'Zones de clima oceànic o de muntanya.',
+   f: { Clima: 'Hiverns freds i estius suaus. Precipitacions abundants i bastant regulars tot l\'any. Sòl fèrtil.',
+        Vegetació: 'Arbres que perden les fulles a l\'hivern i les recuperen a la primavera: roures, faigs, tells, aurons. Sotabosc pobre per la poca llum.',
+        Fauna: 'Molt rica: cérvol, porc senglar, llop, mussol.' },
+   place: 'Est dels Estats Units, centre d\'Europa (Selva Negra) i est de la Xina.',
+   note: 'La seva superfície s\'ha reduït molt per l\'extensió de l\'agricultura i l\'explotació forestal.',
+   pts: [[40,-78,'Est dels EUA'],[51,10,'Centre d\'Europa'],[33,112,'Est de la Xina']] },
+ { id: 'landa', g: 'fresc', name: 'Landa',
+   desc: 'Degradació del bosc caducifoli per acció antròpica: agricultura, ramaderia o tala.',
+   f: { Vegetació: 'A les clarianes dels boscos abunden els matollars (bruc, ginesta) i els prats.' },
+   place: 'Pràcticament la mateixa distribució geogràfica que el bosc caducifoli.',
+   pts: [[52,-3,'Europa atlàntica']] },
+ { id: 'estepacont', g: 'fresc', name: 'Estepes continentals',
+   desc: 'A l\'interior dels continents, en zones temperades.',
+   f: { Clima: 'Precipitacions escasses i oscil·lacions tèrmiques: estius moderats i hiverns freds.',
+        Vegetació: 'Herbes variades, en tres grans variants: la praderia (Amèrica del Nord), l\'estepa (Europa oriental i Àsia, predominen les gramínies) i la pampa (Argentina).',
+        Fauna: 'Grans herbívors, com els bisons.' },
+   place: 'Praderia d\'Amèrica del Nord, estepa d\'Europa oriental i Sibèria, i pampa argentina.',
+   note: 'Era molt extens, però l\'agricultura extensiva de secà (cereals) i la ramaderia sedentària l\'han alterat i reduït molt.',
+   pts: [[45,-100,'Praderia'],[48,60,'Estepa'],[-36,-61,'Pampa']] },
+ { id: 'desertcont', g: 'fresc', name: 'Deserts continentals',
+   desc: 'Bioma caracteritzat per un clima fred però amb grans oscil·lacions tèrmiques.',
+   f: { Clima: 'Fred, amb grans oscil·lacions tèrmiques i manca d\'aigua.',
+        Vegetació: 'Escassa.', Fauna: 'Escassa.' },
+   place: 'Interior del continent asiàtic, nord-oest dels Estats Units i extrem sud del continent americà.',
+   pts: [[40,85,'Interior d\'Àsia'],[-45,-69,'Patagònia']] },
+
+ // B. Biomes temperats · temperat càlid (sud)
+ { id: 'laurisilva', g: 'calid', name: 'Laurisilva',
+   desc: 'Bosc subtropical humit de les latituds temperades càlides.',
+   f: { Clima: 'Precipitacions abundants.',
+        Vegetació: 'Molta vegetació, de fulla perenne (llorers), i un sotabosc dens amb arbustos, lianes, etc.' },
+   place: 'Nova Zelanda i les illes Canàries.',
+   note: 'Molt explotada per l\'home.',
+   pts: [[28,-15.5,'Illes Canàries'],[-40,175,'Nova Zelanda']] },
+ { id: 'mediterrani', g: 'calid', name: 'Bosc escleròfil·le mediterrani (durisilva)',
+   desc: 'Propi del món mediterrani, com una gran part de Catalunya.',
+   f: { Clima: 'Hiverns suaus i estius secs i calorosos. Plou poc, sobretot a la primavera i una mica a la tardor. Sòl pobre i vulnerable.',
+        Vegetació: 'Adaptada a la sequera, de fulla perenne i resistent: l\'alzina (la més abundant), el garric, el garrofer, l\'olivera i l\'alzina surera. Sotabosc de llentiscle, arboç o esparreguera.',
+        Fauna: 'Petits mamífers, com el conill, el ratolí o el porc senglar.' },
+   place: 'Món mediterrani, Califòrnia, Xile i sud d\'Austràlia.',
+   note: 'Molt alterat per l\'home: l\'alzina ha estat substituïda pel pi blanc i la tala ha erosionat el sòl, amb risc permanent d\'incendis a l\'estiu.',
+   pts: [[42,13,'Mediterrani'],[37,-121,'Califòrnia'],[-33,-71.5,'Xile'],[-32,117,'Sud d\'Austràlia']] },
+ { id: 'matollar', g: 'calid', name: 'Matollar',
+   desc: 'Degradació del bosc mediterrani amb manca d\'aigua.',
+   f: { Vegetació: 'Matollars baixos i espinosos resistents a la sequera. Dos tipus: la màquia (densa massa d\'arbustos: olivera silvestre, bruc, llentiscle) i la garriga (arbustos amb zones descobertes: romaní, farigola, espígol).' },
+   place: 'Conca mediterrània.',
+   pts: [[38.5,23,'Mediterrani oriental']] },
+ { id: 'estepasub', g: 'calid', name: 'Estepa subtropical',
+   desc: 'Pròpia del clima semiàrid: àrees seques o desforestades.',
+   f: { Clima: 'Semiàrid.',
+        Vegetació: 'Sòl en gran part descobert i molt pobre: espart, farigola o margalló.' },
+   place: 'Els Monegros, a l\'interior de la vall de l\'Ebre (exemple de degradació).',
+   pts: [[41.6,-0.3,'Els Monegros']] },
+ { id: 'desertsub', g: 'calid', name: 'Desert subtropical',
+   desc: 'Llocs amb clima àrid o desertificats, és a dir, convertits en deserts per l\'acció antròpica.',
+   f: { Clima: 'Àrid.', Vegetació: 'Pràcticament sense vegetació.' },
+   place: 'L\'Iraq o el desert de Tabernas, a Almeria.',
+   pts: [[33,44,'Iraq']] },
+
+ // C. Biomes intertropicals
+ { id: 'selva', g: 'tropic', name: 'Selva equatorial (pluviïsilva)',
+   desc: 'Als dos costats de l\'Equador.',
+   f: { Clima: 'Molt regular, amb poca oscil·lació tèrmica: temperatura càlida, pluja abundant i humitat alta.',
+        Vegetació: 'Exuberant: arbres de llargs troncs en dos o tres estrats, herbes altes al sotabosc i llargues lianes. La pluja provoca lixiviació i la capa de sòl fèrtil és molt prima.',
+        Fauna: 'Abundància enorme d\'espècies.' },
+   place: 'La conca amazònica, l\'Àfrica equatorial, Indonèsia i Nova Guinea.',
+   pts: [[-5,-65,'Amazònia'],[0,22,'Àfrica equatorial'],[0,113,'Indonèsia'],[-5,142,'Nova Guinea']] },
+ { id: 'jungla', g: 'tropic', name: 'Jungla tropical (monsònica)',
+   desc: 'Clima similar al de la selva equatorial, però amb estacions.',
+   f: { Clima: 'Una estació seca i una altra de pluges. A l\'Índia i al sud d\'Àsia les pluges són monsòniques.',
+        Vegetació: 'Menys varietat; arbres caducifolis: teca i banús. Els eucaliptus australians són de fulla perenne.',
+        Fauna: 'Mamífers arborícoles (coales, micos) i aus: lloros, cacatues, tucans.' },
+   place: 'Amèrica, Austràlia, l\'Índia i el sud-est asiàtic.',
+   pts: [[21,78,'Índia'],[16,102,'Sud-est asiàtic']] },
+ { id: 'sabana', g: 'tropic', name: 'Sabana',
+   desc: 'La sabana per excel·lència és l\'africana.',
+   f: { Clima: 'Càlid tot l\'any, amb dues estacions: una seca i una humida, quan plou. Sòl pobre, prim i lixiviat.',
+        Vegetació: 'Herbes i arbustos. Tres tipus: sabana arbrada (la més humida, amb baobabs i acàcies espinoses), paisatge en parc (més àrida, amb herbes altes) i gramenets (la més àrida, amb herbes baixes).',
+        Fauna: 'Grans herbívors (girafes, zebres, elefants, gaseles) i els seus depredadors (lleons, lleopards).' },
+   place: 'Àfrica (sobretot), Amèrica del Sud i Austràlia.',
+   note: 'Les sequeres són el gran problema: posen en perill ramats i collites.',
+   pts: [[-3,35,'Àfrica oriental'],[-14,-50,'Brasil']] },
+ { id: 'estepatrop', g: 'tropic', name: 'Estepa tropical (subdesert espinós)',
+   desc: 'Si l\'aridesa és molt accentuada es converteix en subdesert.',
+   f: { Clima: 'Molt sec; el sòl condiciona la retenció d\'aigua.',
+        Vegetació: 'Sobretot arbustos xeròfils, espinosos i caducifolis. En alguns llocs, cactus.',
+        Fauna: 'Molt limitada: llebres, gaseles, lleons o el puma americà.' },
+   place: 'Amèrica, Àfrica, sud-oest d\'Àsia i Austràlia.',
+   pts: [[15,0,'Sahel (Àfrica)'],[-24,145,'Austràlia']] },
+ { id: 'desertcalid', g: 'tropic', name: 'Desert càlid',
+   desc: 'Apareix al voltant dels tròpics. Són característiques les dunes mòbils de sorra o ergs.',
+   f: { Clima: 'Aire càlid i sec, clima molt àrid. Temperatures altes però amb un fort descens nocturn.',
+        Vegetació: 'Molt escassa, només on hi ha una mica d\'aigua. Els cactus en són propis.',
+        Fauna: 'Petits animals adaptats al calor extrem: llebre del desert, guineu, dromedaris.' },
+   place: 'Hemisferi nord: Sàhara, Aràbia, Gobi, Mojave i Sonora. Hemisferi sud: Kalahari, Atacama i Victòria (Austràlia).',
+   pts: [[23,10,'Sàhara'],[22,47,'Aràbia'],[-23,22,'Kalahari'],[-24,-69.5,'Atacama'],[-28,128,'Desert de Victòria']] },
+
+ // 2.2 Biomes aquàtics · aigua salada
+ { id: 'marins', g: 'salada', name: 'Biomes marins',
+   desc: 'Són els mars i els oceans de tot el planeta. L\'aigua presenta una salinitat variable.',
+   f: { Condicionants: 'La llum, la salinitat, la temperatura de l\'aigua i els nutrients.',
+        Tipus: 'Segons la profunditat: eufòtics (aigües superficials) i afòtics (aigües profundes amb poca llum).',
+        Vida: 'El fitoplàncton (organismes productors) es troba a la superfície. On es barregen aigües càlides i fredes hi ha molts nutrients i plàncton: gran riquesa pesquera.' },
+   place: 'Tots els mars i oceans: Pacífic, Atlàntic, Índic...',
+   note: 'Els grans problemes són la contaminació i la sobreexplotació pesquera.',
+   pts: [[0,-140,'Oceà Pacífic'],[-25,-20,'Oceà Atlàntic'],[-20,80,'Oceà Índic']] },
+
+ // 2.2 Biomes aquàtics · aigua dolça
+ { id: 'quieta', g: 'dolca', name: 'Aigua quieta',
+   desc: 'Són els llacs, estanys i pantans.',
+   f: { Condicionants: 'La llum, la temperatura de l\'aigua i els nutrients.' },
+   place: 'Grans Llacs d\'Amèrica del Nord, llac Ladoga (Europa), llacs Victòria i Tanganyika (Àfrica).',
+   pts: [[45,-84,'Grans Llacs'],[61,31,'Llac Ladoga']] },
+ { id: 'corrent', g: 'dolca', name: 'Aigua corrent',
+   desc: 'Són els rius amb els seus ecosistemes.',
+   f: { Vegetació: 'Les plantes s\'adapten al corrent i es fixen.',
+        Fauna: 'Peixos adaptats a l\'aigua dolça; alguns, com els salmons, superen els corrents.' },
+   place: 'Rius com l\'Amazones, el Nil, el Volga o el Mississipí.',
+   pts: [[34,-90,'Mississipí'],[20,32,'Nil'],[52,46,'Volga']] },
+ { id: 'molleres', g: 'dolca', name: 'Molleres',
+   desc: 'Pantans, aiguamolls, maresmes i deltes.',
+   f: { Característiques: 'Gran riquesa vegetal i animal. Molt importants per a les aus, per això estan protegits legalment.' },
+   place: 'Deltes del Nil i de l\'Amazones. A Catalunya: deltes de l\'Ebre i del Llobregat i aiguamolls de l\'Empordà.',
+   note: 'En regressió per dessecació: l\'acció antròpica ha reduït aquests ecosistemes.',
+   pts: [[31,31,'Delta del Nil'],[0,-50,'Delta de l\'Amazones']] }
+];
 
 let exploredSet = new Set();
 let activeCat = 'tots';
 let searchQuery = '';
+let selectedId = null;
 
-// Inicialització
 document.addEventListener('DOMContentLoaded', () => {
  initNavigation();
  initMap();
  initFilters();
  initSearch();
+ renderLegend();
+ renderScheme();
  initFlashcards();
  document.getElementById('btnRestart').addEventListener('click', initQuiz);
+ document.getElementById('btnQuizNext').addEventListener('click', nextQuestion);
  initQuiz();
+ updateProgress();
 });
 
 // Navegació per pestanyes
+function showView(id) {
+ document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.view === id));
+ document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === id));
+}
 function initNavigation() {
- const buttons = document.querySelectorAll('nav button');
- const views = document.querySelectorAll('.view');
- buttons.forEach(btn => {
-  btn.addEventListener('click', () => {
-   buttons.forEach(b => b.classList.remove('active'));
-   views.forEach(v => v.classList.remove('active'));
-   btn.classList.add('active');
-   document.getElementById(btn.dataset.view).classList.add('active');
+ document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => showView(btn.dataset.view));
+ });
+}
+
+// Punts al mapa (projecció equirectangular)
+function initMap() {
+ const mapEl = document.getElementById('map');
+ biomesData.forEach(b => {
+  b.pts.forEach(([lat, lon, label]) => {
+   const hs = document.createElement('button');
+   hs.type = 'button';
+   hs.className = 'hotspot';
+   hs.dataset.id = b.id;
+   hs.style.left = ((lon + 180) / 3.6) + '%';
+   hs.style.top = ((90 - lat) / 1.8) + '%';
+   hs.style.backgroundColor = groupById[b.g].color;
+   hs.title = `${b.name} · ${label}`;
+   hs.setAttribute('aria-label', hs.title);
+   hs.addEventListener('click', () => selectBiome(b.id));
+   mapEl.appendChild(hs);
   });
  });
 }
 
-// Generació de punts al mapa
-function initMap() {
- const mapEl = document.getElementById('map');
- biomesData.forEach(b => {
-  const hs = document.createElement('button');
-  hs.type = 'button';
-  hs.className = 'hotspot';
-  hs.style.left = b.x + '%';
-  hs.style.top = b.y + '%';
-  hs.style.backgroundColor = b.color;
-  hs.title = b.name;
-  hs.setAttribute('aria-label', b.name);
-  hs.addEventListener('click', () => selectBiome(b, hs));
-  mapEl.appendChild(hs);
- });
-}
-
-// Selecció d'un bioma
-function selectBiome(b, hsElement) {
- document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('selected'));
- if(hsElement) hsElement.classList.add('selected');
-
- const detailDot = document.getElementById('detailDot');
- const detailName = document.getElementById('detailName');
- const detailContent = document.getElementById('detailContent');
-
- detailDot.style.backgroundColor = b.color;
- detailName.textContent = b.name;
- detailContent.innerHTML = `
-  <p>${b.desc}</p>
-  <div class="data">
-   <div><b>Clima</b>${b.climate}</div>
-   <div><b>Vegetació</b>${b.veg}</div>
-   <div><b>Fauna</b>${b.fauna}</div>
-   <div><b>Categoria</b>${catLabels[b.cat]}</div>
-  </div>
-  <div class="key"><b>On el trobem?</b><br>${b.place}</div>
- `;
-
- // Actualitzar progrés
- exploredSet.add(b.id);
+function updateProgress() {
  const count = exploredSet.size;
  document.getElementById('progressText').textContent = `${count} / ${biomesData.length} biomes explorats`;
  document.getElementById('progressBar').style.width = `${(count / biomesData.length) * 100}%`;
 }
 
-// Filtres
+// Selecció d'un bioma
+function selectBiome(id) {
+ const b = biomesData.find(x => x.id === id);
+ const g = groupById[b.g];
+ selectedId = id;
+ document.getElementById('map').classList.add('hasSel');
+ document.querySelectorAll('.hotspot').forEach(h => h.classList.toggle('selected', h.dataset.id === id));
+
+ document.getElementById('detailDot').style.backgroundColor = g.color;
+ document.getElementById('detailName').textContent = b.name;
+ const fields = Object.entries(b.f).map(([k, v]) => `<div><b>${k}</b>${v}</div>`).join('');
+ document.getElementById('detailContent').innerHTML = `
+  <div class="tag">${g.parent} · ${g.name}</div>
+  <p>${b.desc}</p>
+  <div class="data">${fields}</div>
+  <div class="key"><b>On el trobem?</b><br>${b.place}</div>
+  ${b.note ? `<div class="warnBox"><b>Acció antròpica / problemes:</b> ${b.note}</div>` : ''}
+ `;
+
+ exploredSet.add(id);
+ updateProgress();
+ renderLegend();
+}
+
+// Filtres per grup
 function initFilters() {
  const filtersEl = document.getElementById('filters');
- Object.keys(catLabels).forEach(c => {
+ [{ id: 'tots', name: 'Tots' }, ...groups].forEach(c => {
   const p = document.createElement('button');
   p.type = 'button';
-  p.className = 'pill' + (c === activeCat ? ' active' : '');
-  p.textContent = catLabels[c];
+  p.className = 'pill' + (c.id === activeCat ? ' active' : '');
+  p.innerHTML = (c.color ? `<span class="dot" style="background:${c.color}"></span>` : '') + c.name;
   p.addEventListener('click', () => {
    filtersEl.querySelectorAll('.pill').forEach(el => el.classList.remove('active'));
    p.classList.add('active');
-   activeCat = c;
+   activeCat = c.id;
    applyFilters();
   });
   filtersEl.appendChild(p);
  });
 }
 
-// Normalitza el text per cercar sense accents ni majúscules
 function normalize(s) {
  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
 
-// Aplica alhora el filtre de categoria i el text del cercador
-function applyFilters() {
+function visibleBiomes() {
  const q = normalize(searchQuery.trim());
- const hotspots = document.querySelectorAll('.hotspot');
- biomesData.forEach((b, idx) => {
-  const catOk = activeCat === 'tots' || b.cat === activeCat;
-  const textOk = !q || normalize(`${b.name} ${b.desc} ${b.place}`).includes(q);
-  hotspots[idx].style.display = catOk && textOk ? 'block' : 'none';
+ return biomesData.filter(b => {
+  const catOk = activeCat === 'tots' || b.g === activeCat;
+  const text = `${b.name} ${b.desc} ${b.place} ${groupById[b.g].name} ${Object.values(b.f).join(' ')}`;
+  return catOk && (!q || normalize(text).includes(q));
  });
 }
 
-// Cercador
+// Aplica alhora el filtre de grup i el text del cercador
+function applyFilters() {
+ const ids = new Set(visibleBiomes().map(b => b.id));
+ document.querySelectorAll('.hotspot').forEach(h => {
+  h.style.display = ids.has(h.dataset.id) ? 'block' : 'none';
+ });
+ renderLegend();
+}
+
 function initSearch() {
  document.getElementById('search').addEventListener('input', (e) => {
   searchQuery = e.target.value;
@@ -340,42 +696,145 @@ function initSearch() {
  });
 }
 
-// Flashcards
-let currentFlash = 0;
-function initFlashcards() {
- const showBtn = document.getElementById('btnShow');
- const nextBtn = document.getElementById('btnNext');
+// Llista de biomes visibles sota el mapa
+function renderLegend() {
+ const el = document.getElementById('legend');
+ const list = visibleBiomes();
+ el.innerHTML = '';
+ if (!list.length) { el.innerHTML = '<span class="small">Cap bioma coincideix amb la cerca.</span>'; return; }
+ list.forEach(b => {
+  const c = document.createElement('button');
+  c.type = 'button';
+  c.className = 'chip' + (b.id === selectedId ? ' active' : '') + (exploredSet.has(b.id) ? ' seen' : '');
+  c.innerHTML = `<span class="dot" style="background:${groupById[b.g].color}"></span>${b.name}`;
+  c.addEventListener('click', () => selectBiome(b.id));
+  el.appendChild(c);
+ });
+}
 
- showBtn.addEventListener('click', () => {
-  document.getElementById('flashDesc').style.display = 'block';
+// Taula de l'esquema dels biomes
+function renderScheme() {
+ const t = document.getElementById('schemeTable');
+ let html = '<tr><th>Tipus</th><th>Grup</th><th>Bioma</th></tr>';
+ groups.forEach(g => {
+  const items = biomesData.filter(b => b.g === g.id);
+  items.forEach((b, i) => {
+   html += '<tr>';
+   if (i === 0) html += `<td class="grp" rowspan="${items.length}">${g.parent}</td><td class="grp" rowspan="${items.length}"><span class="dot" style="background:${g.color}"></span> ${g.name}</td>`;
+   html += `<td class="bio" data-id="${b.id}">${b.name}</td></tr>`;
+  });
+ });
+ t.innerHTML = html;
+ t.querySelectorAll('td.bio').forEach(td => td.addEventListener('click', () => {
+  showView('mapa');
+  selectBiome(td.dataset.id);
+ }));
+}
+
+// Flashcards
+let flashDeck = [];
+let currentFlash = 0;
+let flashCat = 'tots';
+
+function buildDeck() {
+ flashDeck = biomesData.filter(b => flashCat === 'tots' || b.g === flashCat);
+ currentFlash = 0;
+}
+
+function initFlashcards() {
+ const ff = document.getElementById('flashFilters');
+ [{ id: 'tots', name: 'Tots' }, ...groups].forEach(c => {
+  const p = document.createElement('button');
+  p.type = 'button';
+  p.className = 'pill' + (c.id === flashCat ? ' active' : '');
+  p.textContent = c.name;
+  p.addEventListener('click', () => {
+   ff.querySelectorAll('.pill').forEach(el => el.classList.remove('active'));
+   p.classList.add('active');
+   flashCat = c.id;
+   buildDeck();
+   renderFlashcard();
+  });
+  ff.appendChild(p);
  });
 
- nextBtn.addEventListener('click', () => {
-  currentFlash = (currentFlash + 1) % biomesData.length;
+ document.getElementById('btnShow').addEventListener('click', () => {
+  document.getElementById('flashDesc').style.display = 'block';
+  document.getElementById('flashHint').style.display = 'none';
+ });
+ document.getElementById('btnNext').addEventListener('click', () => {
+  currentFlash = (currentFlash + 1) % flashDeck.length;
+  renderFlashcard();
+ });
+ document.getElementById('btnPrev').addEventListener('click', () => {
+  currentFlash = (currentFlash - 1 + flashDeck.length) % flashDeck.length;
+  renderFlashcard();
+ });
+ document.getElementById('btnShuffle').addEventListener('click', () => {
+  flashDeck = shuffle(flashDeck);
+  currentFlash = 0;
   renderFlashcard();
  });
 
+ buildDeck();
  renderFlashcard();
 }
 
 function renderFlashcard() {
- const b = biomesData[currentFlash];
- document.getElementById('flashNum').textContent = `Targeta ${currentFlash + 1} de ${biomesData.length}`;
+ const b = flashDeck[currentFlash];
+ const g = groupById[b.g];
+ document.getElementById('flashNum').textContent = `Targeta ${currentFlash + 1} de ${flashDeck.length}`;
+ document.getElementById('flashGroup').textContent = g.name;
  document.getElementById('flashTitle').textContent = b.name;
- document.getElementById('flashDesc').textContent = `Clima: ${b.climate} | Vegetació: ${b.veg}`;
+ document.getElementById('flashDesc').innerHTML =
+  `<p>${b.desc}</p>` + Object.entries(b.f).map(([k, v]) => `<p><b>${k}:</b> ${v}</p>`).join('') + `<p><b>On:</b> ${b.place}</p>`;
  document.getElementById('flashDesc').style.display = 'none';
+ document.getElementById('flashHint').style.display = 'block';
 }
 
-// Quiz
-const quizQuestions = [
- { q: "Quin bioma es caracteritza per tenir el sòl congelat (permafrost)?", options: ["Taigà", "Tundra", "Desert"], correct: 1 },
- { q: "Quin és el bioma terrestre més extens de la Terra?", options: ["Bioma Mediterrani", "Selva Equatorial", "Taigà"], correct: 2 },
- { q: "Quin bioma està adaptat a la sequera durant l'estiu?", options: ["Bioma Mediterrani", "Sabana", "Tundra"], correct: 0 }
+function shuffle(arr) {
+ const a = arr.slice();
+ for (let i = a.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [a[i], a[j]] = [a[j], a[i]];
+ }
+ return a;
+}
+
+// Quiz: la primera opció de cada pregunta és la correcta (es barregen en mostrar-les)
+const quizBank = [
+ { q: 'Entre quines latituds es troba la taigà?', options: ['Entre els 50º i 70º N', 'Per sobre dels 70º N', 'Entre els 23º i 35º N', 'A l\'Equador'], why: 'La taigà o bosc boreal es troba entre els 50º i 70º de latitud nord.' },
+ { q: 'Quin bioma es troba per sobre dels 70º N, amb brucs, líquens i molses?', options: ['Tundra', 'Taigà', 'Estepa continental', 'Landa'], why: 'La tundra és més al nord que la taigà, amb un clima més rigorós.' },
+ { q: 'Què és el permafrost?', options: ['Capa de sòl permanentment glaçada', 'Un tipus de conífera', 'La neu que cau a la tundra', 'Un vent polar'], why: 'És la capa de sòl que es manté permanentment glaçada als biomes de clima fred.' },
+ { q: 'Quins són els tres biomes de clima fred?', options: ['Taigà, tundra i deserts polars', 'Taigà, landa i estepa', 'Tundra, sabana i desert càlid', 'Bosc caducifoli, taigà i tundra'], why: 'Segons l\'esquema: taigà, tundra i deserts polars.' },
+ { q: 'La landa és una degradació de...', options: ['el bosc caducifoli', 'el bosc mediterrani', 'la selva equatorial', 'la taigà'], why: 'La landa és la degradació del bosc caducifoli per l\'acció antròpica.' },
+ { q: 'Com s\'anomena l\'estepa continental de l\'Argentina?', options: ['La pampa', 'La praderia', 'La garriga', 'La sabana'], why: 'Praderia (Amèrica del Nord), estepa (Europa oriental i Àsia) i pampa (Argentina).' },
+ { q: 'On es pot trobar encara la laurisilva?', options: ['A les illes Canàries i Nova Zelanda', 'Al Sàhara', 'A Sibèria', 'Als Monegros'], why: 'És el bosc subtropical humit; encara es troba a Nova Zelanda i a les Canàries.' },
+ { q: 'Quin és l\'arbre més abundant del bosc escleròfil·le mediterrani?', options: ['L\'alzina', 'El faig', 'L\'avet', 'El baobab'], why: 'L\'alzina és l\'arbre més abundant; també hi ha garric, garrofer i olivera.' },
+ { q: 'La màquia i la garriga són tipus de...', options: ['matollar', 'landa', 'sabana', 'tundra'], why: 'El matollar és una degradació del bosc mediterrani: màquia (densa) i garriga (amb zones descobertes).' },
+ { q: 'Quin és un exemple d\'estepa subtropical a la vall de l\'Ebre?', options: ['Els Monegros', 'El delta de l\'Ebre', 'La Selva Negra', 'El desert de Tabernas'], why: 'Els Monegros són una estepa subtropical de clima semiàrid.' },
+ { q: 'El desert de Tabernas (Almeria) és un exemple de...', options: ['desert subtropical', 'desert polar', 'desert continental', 'estepa tropical'], why: 'El desert subtropical inclou llocs desertificats per l\'acció antròpica, com l\'Iraq o Tabernas.' },
+ { q: 'Quin bioma intertropical té una estació seca i una de pluges monsòniques?', options: ['Jungla tropical', 'Selva equatorial', 'Desert càlid', 'Sabana'], why: 'A l\'Índia i al sud d\'Àsia, la jungla tropical rep les pluges del monsó.' },
+ { q: 'Per què el sòl de la selva equatorial és prim i pobre?', options: ['Per la lixiviació causada per la pluja', 'Pel permafrost', 'Per la sequera', 'Per la tala'], why: 'La pluja abundant renta l\'horitzó superior del sòl (lixiviació).' },
+ { q: 'Quin és el tipus de sabana més humit?', options: ['Sabana arbrada', 'Paisatge en parc', 'Gramenets', 'Estepa tropical'], why: 'La sabana arbrada és la més humida, amb baobabs i acàcies espinoses.' },
+ { q: 'Com s\'anomenen les plantes adaptades a climes molt secs?', options: ['Xeròfils', 'Caducifolis', 'Escleròfil·les', 'Perennifolis'], why: 'Els xeròfils són plantes adaptades a climes molt secs i àrids.' },
+ { q: 'Com s\'anomenen les aigües marines superficials, on arriba la llum?', options: ['Eufòtiques', 'Afòtiques', 'Molleres', 'Lixiviades'], why: 'Els biomes marins poden ser eufòtics (superficials) i afòtics (profunds amb poca llum).' },
+ { q: 'Quines són les molleres més importants de Catalunya?', options: ['Els deltes de l\'Ebre i del Llobregat i els aiguamolls de l\'Empordà', 'Els Monegros', 'El llac de Banyoles i el Montseny', 'La Selva i el Vallès'], why: 'Les molleres són pantans, aiguamolls, maresmes i deltes.' },
+ { q: 'Quina diferència hi ha entre "desertitzat" i "desertificat"?', options: ['Desertitzat és per causes naturals; desertificat, per causes antròpiques', 'Són sinònims', 'Desertitzat és per l\'home; desertificat, natural', 'Desertificat només es fa servir per als deserts freds'], why: 'Desertitzat: raons naturals. Desertificat: raons antròpiques.' },
+ { q: 'Quines són les tres regions biogeogràfiques de la Península i les illes?', options: ['Eurosiberiana, mediterrània i macaronèsica', 'Atlàntica, cantàbrica i bètica', 'Humida, seca i tropical', 'Pirinenca, central i litoral'], why: 'La macaronèsica només es troba a les illes Canàries.' },
+ { q: 'Quin és el cim més alt de la Península Ibèrica?', options: ['El Mulhacén (3.478 m)', 'L\'Aneto (3.404 m)', 'La Pica d\'Estats (3.143 m)', 'El Puigmal'], why: 'El Mulhacén, a Sierra Nevada (Penibètiques), fa 3.478 m.' },
+ { q: 'Quin és l\'únic riu català que desemboca a l\'oceà Atlàntic?', options: ['El Garona', 'El Segre', 'El Ter', 'El Llobregat'], why: 'El Garona neix a la Vall d\'Aran i va cap a França.' },
+ { q: 'On destaca el vulcanisme a Catalunya?', options: ['A la Serralada Transversal (Garrotxa)', 'Al Pirineu axial', 'Al delta de l\'Ebre', 'A la Depressió Central'], why: 'Els volcans més coneguts són Santa Margarida, el Croscat i el Montsacopa.' },
+ { q: 'Quin és el riu més llarg d\'Europa?', options: ['El Volga', 'El Danubi', 'El Rin', 'L\'Ebre'], why: 'El Volga flueix cap al sud i desemboca a la mar Càspia.' },
+ { q: 'Quina és la muntanya més alta d\'Àfrica?', options: ['El Kilimanjaro', 'L\'Atlas', 'L\'Everest', 'L\'Aconcagua'], why: 'El Kilimanjaro (5.893 m) és d\'origen volcànic i és a Tanzània.' }
 ];
+const QUIZ_LEN = 10;
+let quizQuestions = [];
 let quizIdx = 0;
 let score = 0;
 
 function initQuiz() {
+ quizQuestions = shuffle(quizBank).slice(0, QUIZ_LEN);
  quizIdx = 0;
  score = 0;
  document.getElementById('quizResult').style.display = 'none';
@@ -385,42 +844,49 @@ function initQuiz() {
 
 function renderQuestion() {
  const q = quizQuestions[quizIdx];
- document.getElementById('quizNum').textContent = `Pregunta ${quizIdx + 1} de ${quizQuestions.length}`;
+ document.getElementById('quizNum').textContent = `Pregunta ${quizIdx + 1} de ${quizQuestions.length} · Encerts: ${score}`;
  document.getElementById('quizQuestion').textContent = q.q;
+ document.getElementById('quizExplain').textContent = '';
+ document.getElementById('btnQuizNext').style.display = 'none';
  const optContainer = document.getElementById('quizOptions');
  optContainer.innerHTML = '';
-
- q.options.forEach((opt, idx) => {
+ shuffle(q.options.map((text, idx) => ({ text, correct: idx === 0 }))).forEach(opt => {
   const btn = document.createElement('button');
   btn.className = 'option';
-  btn.textContent = opt;
-  btn.addEventListener('click', () => checkAnswer(idx));
+  btn.textContent = opt.text;
+  btn.dataset.correct = opt.correct;
+  btn.addEventListener('click', () => checkAnswer(btn));
   optContainer.appendChild(btn);
  });
 }
 
 function checkAnswer(selected) {
  const q = quizQuestions[quizIdx];
- if(selected === q.correct) score++;
-
- // Mostra la resposta correcta (i l'errada) abans de passar a la següent pregunta
- const buttons = document.querySelectorAll('#quizOptions .option');
- buttons.forEach((btn, idx) => {
+ const ok = selected.dataset.correct === 'true';
+ if (ok) score++;
+ document.querySelectorAll('#quizOptions .option').forEach(btn => {
   btn.disabled = true;
-  if(idx === q.correct) btn.classList.add('correct');
-  else if(idx === selected) btn.classList.add('wrong');
+  if (btn.dataset.correct === 'true') btn.classList.add('correct');
+  else if (btn === selected) btn.classList.add('wrong');
  });
+ document.getElementById('quizExplain').textContent = (ok ? '✓ Correcte. ' : '✗ Incorrecte. ') + q.why;
+ const next = document.getElementById('btnQuizNext');
+ next.textContent = quizIdx + 1 < quizQuestions.length ? 'Següent pregunta' : 'Veure resultat';
+ next.style.display = 'inline-block';
+}
 
- setTimeout(() => {
-  quizIdx++;
-  if(quizIdx < quizQuestions.length) {
-   renderQuestion();
-  } else {
-   document.getElementById('quizContainer').style.display = 'none';
-   document.getElementById('quizResult').style.display = 'block';
-   document.getElementById('scoreText').textContent = `${score} / ${quizQuestions.length}`;
-  }
- }, 1100);
+function nextQuestion() {
+ quizIdx++;
+ if (quizIdx < quizQuestions.length) {
+  renderQuestion();
+ } else {
+  document.getElementById('quizContainer').style.display = 'none';
+  document.getElementById('quizResult').style.display = 'block';
+  document.getElementById('scoreText').textContent = `${score} / ${quizQuestions.length}`;
+  const pct = score / quizQuestions.length;
+  document.getElementById('scoreMsg').textContent =
+   pct >= 0.8 ? 'Excel·lent! Domines la unitat.' : pct >= 0.5 ? 'Bé! Repassa les targetes per millorar.' : 'Cal repassar: torna al mapa i a les targetes.';
+ }
 }
 </script>
 </body>
