@@ -180,6 +180,8 @@ table.scheme td.bio:hover{background:#f0f7fb}
 <section id="quiz" class="view">
  <div class="card">
   <h2>Avaluació ràpida</h2>
+  <div class="small" style="margin-bottom:8px">Tria un tema. Cada partida té fins a 15 preguntes a l'atzar.</div>
+  <div class="filters" id="quizFilters"></div>
   <div id="quizContainer">
    <div class="small" id="quizNum"></div>
    <div class="quizQ" id="quizQuestion">Pregunta...</div>
@@ -587,6 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
  renderScheme();
  initFlashcards();
  document.getElementById('btnRestart').addEventListener('click', initQuiz);
+ initQuizFilters();
  document.getElementById('btnQuizNext').addEventListener('click', nextQuestion);
  initQuiz();
  updateProgress();
@@ -806,39 +809,119 @@ function shuffle(arr) {
 }
 
 // Quiz: la primera opció de cada pregunta és la correcta (es barregen en mostrar-les)
+// t = tema: conceptes, biomes, continents, iberia, catalunya
 const quizBank = [
- { q: 'Entre quines latituds es troba la taigà?', options: ['Entre els 50º i 70º N', 'Per sobre dels 70º N', 'Entre els 23º i 35º N', 'A l\'Equador'], why: 'La taigà o bosc boreal es troba entre els 50º i 70º de latitud nord.' },
- { q: 'Quin bioma es troba per sobre dels 70º N, amb brucs, líquens i molses?', options: ['Tundra', 'Taigà', 'Estepa continental', 'Landa'], why: 'La tundra és més al nord que la taigà, amb un clima més rigorós.' },
- { q: 'Què és el permafrost?', options: ['Capa de sòl permanentment glaçada', 'Un tipus de conífera', 'La neu que cau a la tundra', 'Un vent polar'], why: 'És la capa de sòl que es manté permanentment glaçada als biomes de clima fred.' },
- { q: 'Quins són els tres biomes de clima fred?', options: ['Taigà, tundra i deserts polars', 'Taigà, landa i estepa', 'Tundra, sabana i desert càlid', 'Bosc caducifoli, taigà i tundra'], why: 'Segons l\'esquema: taigà, tundra i deserts polars.' },
- { q: 'La landa és una degradació de...', options: ['el bosc caducifoli', 'el bosc mediterrani', 'la selva equatorial', 'la taigà'], why: 'La landa és la degradació del bosc caducifoli per l\'acció antròpica.' },
- { q: 'Com s\'anomena l\'estepa continental de l\'Argentina?', options: ['La pampa', 'La praderia', 'La garriga', 'La sabana'], why: 'Praderia (Amèrica del Nord), estepa (Europa oriental i Àsia) i pampa (Argentina).' },
- { q: 'On es pot trobar encara la laurisilva?', options: ['A les illes Canàries i Nova Zelanda', 'Al Sàhara', 'A Sibèria', 'Als Monegros'], why: 'És el bosc subtropical humit; encara es troba a Nova Zelanda i a les Canàries.' },
- { q: 'Quin és l\'arbre més abundant del bosc escleròfil·le mediterrani?', options: ['L\'alzina', 'El faig', 'L\'avet', 'El baobab'], why: 'L\'alzina és l\'arbre més abundant; també hi ha garric, garrofer i olivera.' },
- { q: 'La màquia i la garriga són tipus de...', options: ['matollar', 'landa', 'sabana', 'tundra'], why: 'El matollar és una degradació del bosc mediterrani: màquia (densa) i garriga (amb zones descobertes).' },
- { q: 'Quin és un exemple d\'estepa subtropical a la vall de l\'Ebre?', options: ['Els Monegros', 'El delta de l\'Ebre', 'La Selva Negra', 'El desert de Tabernas'], why: 'Els Monegros són una estepa subtropical de clima semiàrid.' },
- { q: 'El desert de Tabernas (Almeria) és un exemple de...', options: ['desert subtropical', 'desert polar', 'desert continental', 'estepa tropical'], why: 'El desert subtropical inclou llocs desertificats per l\'acció antròpica, com l\'Iraq o Tabernas.' },
- { q: 'Quin bioma intertropical té una estació seca i una de pluges monsòniques?', options: ['Jungla tropical', 'Selva equatorial', 'Desert càlid', 'Sabana'], why: 'A l\'Índia i al sud d\'Àsia, la jungla tropical rep les pluges del monsó.' },
- { q: 'Per què el sòl de la selva equatorial és prim i pobre?', options: ['Per la lixiviació causada per la pluja', 'Pel permafrost', 'Per la sequera', 'Per la tala'], why: 'La pluja abundant renta l\'horitzó superior del sòl (lixiviació).' },
- { q: 'Quin és el tipus de sabana més humit?', options: ['Sabana arbrada', 'Paisatge en parc', 'Gramenets', 'Estepa tropical'], why: 'La sabana arbrada és la més humida, amb baobabs i acàcies espinoses.' },
- { q: 'Com s\'anomenen les plantes adaptades a climes molt secs?', options: ['Xeròfils', 'Caducifolis', 'Escleròfil·les', 'Perennifolis'], why: 'Els xeròfils són plantes adaptades a climes molt secs i àrids.' },
- { q: 'Com s\'anomenen les aigües marines superficials, on arriba la llum?', options: ['Eufòtiques', 'Afòtiques', 'Molleres', 'Lixiviades'], why: 'Els biomes marins poden ser eufòtics (superficials) i afòtics (profunds amb poca llum).' },
- { q: 'Quines són les molleres més importants de Catalunya?', options: ['Els deltes de l\'Ebre i del Llobregat i els aiguamolls de l\'Empordà', 'Els Monegros', 'El llac de Banyoles i el Montseny', 'La Selva i el Vallès'], why: 'Les molleres són pantans, aiguamolls, maresmes i deltes.' },
- { q: 'Quina diferència hi ha entre "desertitzat" i "desertificat"?', options: ['Desertitzat és per causes naturals; desertificat, per causes antròpiques', 'Són sinònims', 'Desertitzat és per l\'home; desertificat, natural', 'Desertificat només es fa servir per als deserts freds'], why: 'Desertitzat: raons naturals. Desertificat: raons antròpiques.' },
- { q: 'Quines són les tres regions biogeogràfiques de la Península i les illes?', options: ['Eurosiberiana, mediterrània i macaronèsica', 'Atlàntica, cantàbrica i bètica', 'Humida, seca i tropical', 'Pirinenca, central i litoral'], why: 'La macaronèsica només es troba a les illes Canàries.' },
- { q: 'Quin és el cim més alt de la Península Ibèrica?', options: ['El Mulhacén', 'L\'Aneto', 'La Pica d\'Estats', 'El Puigmal'], why: 'El Mulhacén, a Sierra Nevada (Penibètiques), fa 3.478 m. L\'Aneto (3.404 m) és el cim més alt dels Pirineus.' },
- { q: 'Quin és l\'únic riu català que desemboca a l\'oceà Atlàntic?', options: ['El Garona', 'El Segre', 'El Ter', 'El Llobregat'], why: 'El Garona neix a la Vall d\'Aran i va cap a França.' },
- { q: 'On destaca el vulcanisme a Catalunya?', options: ['A la Serralada Transversal (Garrotxa)', 'Al Pirineu axial', 'Al delta de l\'Ebre', 'A la Depressió Central'], why: 'Els volcans més coneguts són Santa Margarida, el Croscat i el Montsacopa.' },
- { q: 'Quin és el riu més llarg d\'Europa?', options: ['El Volga', 'El Danubi', 'El Rin', 'L\'Ebre'], why: 'El Volga flueix cap al sud i desemboca a la mar Càspia.' },
- { q: 'Quina és la muntanya més alta d\'Àfrica?', options: ['El Kilimanjaro', 'L\'Atlas', 'L\'Everest', 'L\'Aconcagua'], why: 'El Kilimanjaro (5.893 m) és d\'origen volcànic i és a Tanzània.' }
+ // Ecosistemes i conceptes
+ { t: 'conceptes', q: 'Com s\'anomenen els elements vius d\'un ecosistema?', options: ['Biòtics', 'Abiòtics', 'Antròpics', 'Geosistema'], why: 'Els elements biòtics són els éssers vius (la biocenosi); els abiòtics, el medi físic (el biòtop).' },
+ { t: 'conceptes', q: 'Quina ciència estudia la interrelació entre els elements biòtics i abiòtics?', options: ['L\'ecologia', 'La geologia', 'La climatologia', 'La cartografia'], why: 'L\'ecologia estudia la interrelació entre els éssers vius i el medi físic.' },
+ { t: 'conceptes', q: 'Quins són els factors condicionants dels ecosistemes?', options: ['L\'aigua, la temperatura, la lluminositat i el vent', 'Només la temperatura', 'La població i la indústria', 'La latitud i la longitud'], why: 'Segons els apunts: l\'aigua, la temperatura, la lluminositat i el vent.' },
+ { t: 'conceptes', q: 'Quan un ecosistema es deteriora, diem que entra en...', options: ['regressió', 'maduresa', 'equilibri', 'successió'], why: 'Si la interrelació és òptima arriba a la maduresa o equilibri; si es deteriora, entra en regressió.' },
+ { t: 'conceptes', q: 'Com s\'anomena la vegetació que hauria de tenir un ecosistema?', options: ['Vegetació potencial', 'Vegetació actual', 'Vegetació antròpica', 'Vegetació xeròfila'], why: 'La potencial és la que hauria de tenir; l\'actual, la que realment té.' },
+ { t: 'conceptes', q: 'Entre quins valors va la longitud?', options: ['De 0º a 180º, est o oest', 'De 0º a 90º, nord o sud', 'De 0º a 360º', 'De 0º a 60º'], why: 'La longitud es mesura des del meridià de Greenwich i va de 0º a 180º. La latitud va de 0º a 90º.' },
+ { t: 'conceptes', q: 'Què és el permafrost?', options: ['Capa de sòl permanentment glaçada', 'Un tipus de conífera', 'La neu que cau a la tundra', 'Un vent polar'], why: 'És la capa de sòl que es manté permanentment glaçada als biomes de clima fred.' },
+ { t: 'conceptes', q: 'Com s\'anomenen les plantes adaptades a climes molt secs?', options: ['Xeròfils', 'Caducifolis', 'Escleròfil·les', 'Perennifolis'], why: 'Els xeròfils són plantes adaptades a climes molt secs i àrids.' },
+ { t: 'conceptes', q: 'Quina diferència hi ha entre "desertitzat" i "desertificat"?', options: ['Desertitzat és per causes naturals; desertificat, per causes antròpiques', 'Són sinònims', 'Desertitzat és per l\'home; desertificat, natural', 'Desertificat només es fa servir per als deserts freds'], why: 'Desertitzat: raons naturals. Desertificat: raons antròpiques.' },
+
+ // Biomes
+ { t: 'biomes', q: 'Entre quines latituds es troba la taigà?', options: ['Entre els 50º i 70º N', 'Per sobre dels 70º N', 'Entre els 23º i 35º N', 'A l\'Equador'], why: 'La taigà o bosc boreal es troba entre els 50º i 70º de latitud nord.' },
+ { t: 'biomes', q: 'Quin bioma es troba per sobre dels 70º N, amb brucs, líquens i molses?', options: ['Tundra', 'Taigà', 'Estepa continental', 'Landa'], why: 'La tundra és més al nord que la taigà, amb un clima més rigorós.' },
+ { t: 'biomes', q: 'Quins són els tres biomes de clima fred?', options: ['Taigà, tundra i deserts polars', 'Taigà, landa i estepa', 'Tundra, sabana i desert càlid', 'Bosc caducifoli, taigà i tundra'], why: 'Segons l\'esquema: taigà, tundra i deserts polars.' },
+ { t: 'biomes', q: 'Quina fauna és pròpia dels deserts polars?', options: ['Pingüins i foques', 'Caribús i ants', 'Dromedaris i escorpins', 'Lleons i girafes'], why: 'Als deserts polars la fauna és més marina que terrestre: pingüins i foques.' },
+ { t: 'biomes', q: 'Quins arbres caracteritzen el bosc caducifoli?', options: ['Roures, faigs, tells i aurons', 'Alzines, garrofers i oliveres', 'Avets i pins', 'Baobabs i acàcies'], why: 'Són arbres que perden les fulles a l\'hivern i les recuperen a la primavera.' },
+ { t: 'biomes', q: 'La landa és una degradació de...', options: ['el bosc caducifoli', 'el bosc mediterrani', 'la selva equatorial', 'la taigà'], why: 'La landa és la degradació del bosc caducifoli per l\'acció antròpica.' },
+ { t: 'biomes', q: 'Com s\'anomena l\'estepa continental de l\'Argentina?', options: ['La pampa', 'La praderia', 'La garriga', 'La sabana'], why: 'Praderia (Amèrica del Nord), estepa (Europa oriental i Àsia) i pampa (Argentina).' },
+ { t: 'biomes', q: 'Quin gran herbívor és propi de les estepes continentals?', options: ['El bisó', 'La girafa', 'El dromedari', 'El caribú'], why: 'A les estepes continentals abunden els grans herbívors, com els bisons.' },
+ { t: 'biomes', q: 'Per què s\'han reduït tant les estepes continentals?', options: ['Per l\'agricultura extensiva de secà i la ramaderia sedentària', 'Pels incendis forestals', 'Per l\'augment del permafrost', 'Per la pujada del nivell del mar'], why: 'L\'agricultura de cereals de secà i la ramaderia sedentària les han alterat molt.' },
+ { t: 'biomes', q: 'On es pot trobar encara la laurisilva?', options: ['A les illes Canàries i Nova Zelanda', 'Al Sàhara', 'A Sibèria', 'Als Monegros'], why: 'És el bosc subtropical humit; encara es troba a Nova Zelanda i a les Canàries.' },
+ { t: 'biomes', q: 'Quin és l\'arbre més abundant del bosc escleròfil·le mediterrani?', options: ['L\'alzina', 'El faig', 'L\'avet', 'El baobab'], why: 'L\'alzina és l\'arbre més abundant; també hi ha garric, garrofer i olivera.' },
+ { t: 'biomes', q: 'A més del Mediterrani, on trobem bosc escleròfil·le?', options: ['A Califòrnia, Xile i el sud d\'Austràlia', 'A Sibèria i el Canadà', 'A l\'Amazònia i el Congo', 'A Groenlàndia i l\'Antàrtida'], why: 'El bosc mediterrani també es troba a Califòrnia, Xile i el sud d\'Austràlia.' },
+ { t: 'biomes', q: 'La màquia i la garriga són tipus de...', options: ['matollar', 'landa', 'sabana', 'tundra'], why: 'El matollar és una degradació del bosc mediterrani: màquia (densa) i garriga (amb zones descobertes).' },
+ { t: 'biomes', q: 'Quin és un exemple d\'estepa subtropical a la vall de l\'Ebre?', options: ['Els Monegros', 'El delta de l\'Ebre', 'La Selva Negra', 'El desert de Tabernas'], why: 'Els Monegros són una estepa subtropical de clima semiàrid.' },
+ { t: 'biomes', q: 'El desert de Tabernas (Almeria) és un exemple de...', options: ['desert subtropical', 'desert polar', 'desert continental', 'estepa tropical'], why: 'El desert subtropical inclou llocs desertificats per l\'acció antròpica, com l\'Iraq o Tabernas.' },
+ { t: 'biomes', q: 'En quants estrats s\'organitzen els arbres de la selva equatorial?', options: ['En dos o tres estrats', 'En un sol estrat', 'En cinc o sis estrats', 'No hi ha arbres'], why: 'Els arbres, de llargs troncs, formen dos o tres estrats en alçada.' },
+ { t: 'biomes', q: 'Per què el sòl de la selva equatorial és prim i pobre?', options: ['Per la lixiviació causada per la pluja', 'Pel permafrost', 'Per la sequera', 'Per la tala'], why: 'La pluja abundant renta l\'horitzó superior del sòl (lixiviació).' },
+ { t: 'biomes', q: 'Quin bioma intertropical té una estació seca i una de pluges monsòniques?', options: ['Jungla tropical', 'Selva equatorial', 'Desert càlid', 'Sabana'], why: 'A l\'Índia i al sud d\'Àsia, la jungla tropical rep les pluges del monsó.' },
+ { t: 'biomes', q: 'Quin és el tipus de sabana més humit?', options: ['Sabana arbrada', 'Paisatge en parc', 'Gramenets', 'Estepa tropical'], why: 'La sabana arbrada és la més humida, amb baobabs i acàcies espinoses.' },
+ { t: 'biomes', q: 'Quin és el gran problema de la sabana?', options: ['Les sequeres', 'El permafrost', 'Les glaçades', 'La salinitat'], why: 'Les sequeres posen en perill la fauna, la flora, els ramats i les collites.' },
+ { t: 'biomes', q: 'Què són els ergs?', options: ['Dunes mòbils de sorra dels deserts càlids', 'Un tipus de liquen de la tundra', 'Aiguamolls dels deltes', 'Pluges monsòniques'], why: 'Les dunes mòbils de sorra o ergs són característiques del desert càlid.' },
+ { t: 'biomes', q: 'Com s\'anomenen les aigües marines superficials, on arriba la llum?', options: ['Eufòtiques', 'Afòtiques', 'Molleres', 'Lixiviades'], why: 'Els biomes marins poden ser eufòtics (superficials) i afòtics (profunds amb poca llum).' },
+ { t: 'biomes', q: 'Quines són les molleres més importants de Catalunya?', options: ['Els deltes de l\'Ebre i del Llobregat i els aiguamolls de l\'Empordà', 'Els Monegros', 'El llac de Banyoles i el Montseny', 'La Selva i el Vallès'], why: 'Les molleres són pantans, aiguamolls, maresmes i deltes.' },
+
+ // Continents
+ { t: 'continents', q: 'Quin és el riu més llarg d\'Europa?', options: ['El Volga', 'El Danubi', 'El Rin', 'L\'Ebre'], why: 'El Volga flueix cap al sud i desemboca a la mar Càspia.' },
+ { t: 'continents', q: 'Quin és el riu més llarg del món segons els apunts?', options: ['El Nil', 'El Volga', 'El Mississipí', 'El Ienissei'], why: 'El Nil fa 6.671 km i forma un gran delta al Mediterrani.' },
+ { t: 'continents', q: 'Quina és la muntanya més alta d\'Àfrica?', options: ['El Kilimanjaro', 'L\'Atlas', 'L\'Everest', 'L\'Aconcagua'], why: 'El Kilimanjaro (5.893 m) és d\'origen volcànic i és a Tanzània.' },
+ { t: 'continents', q: 'Quin estret separa Europa d\'Àfrica?', options: ['L\'estret de Gibraltar', 'L\'estret de Bering', 'El Sinaí', 'El Bòsfor'], why: 'L\'estret de Gibraltar separa Àfrica d\'Europa; el Sinaí la uneix a Àsia.' },
+ { t: 'continents', q: 'Quina muntanya és coneguda com "el sostre del món"?', options: ['L\'Everest', 'El Kilimanjaro', 'L\'Aconcagua', 'El McKinley'], why: 'L\'Everest, a l\'Himàlaia, fa 8.848 m.' },
+ { t: 'continents', q: 'Quin és l\'altiplà més alt del món?', options: ['El Tibet', 'El Dècan', 'L\'altiplà de l\'Iran', 'L\'altiplà de Mongòlia'], why: 'El Tibet es troba entre els 4.000 i els 5.000 m d\'altitud.' },
+ { t: 'continents', q: 'On es troben les altituds més grans d\'Amèrica?', options: ['Als Andes', 'A les Rocalloses', 'Al massís Brasiler', 'Al massís de les Guaianes'], why: 'Als Andes hi ha l\'Aconcagua (6.959 m); a les Rocalloses, el McKinley (6.194 m).' },
+ { t: 'continents', q: 'Quin és el llac d\'aigua dolça més gran d\'Europa?', options: ['El Ladoga', 'El Victòria', 'El Tanganyika', 'L\'Eyre'], why: 'El Ladoga es troba al nord-oest de Rússia.' },
+ { t: 'continents', q: 'Quin és el continent més petit?', options: ['Oceania', 'Europa', 'L\'Antàrtida', 'Àfrica'], why: 'Oceania té 8.945.712 km² i està formada per multitud d\'illes.' },
+ { t: 'continents', q: 'Quins són els únics veritables rius d\'Austràlia?', options: ['El Murray i el Darling', 'El Nil i el Congo', 'El Volga i el Danubi', 'El Ganges i l\'Indus'], why: 'La resta de rius porten poca aigua i desemboquen al llac Eyre.' },
+ { t: 'continents', q: 'Per què l\'Antàrtida és un autèntic continent i el pol Nord no?', options: ['Perquè el pol Sud està format per terres emergides', 'Perquè hi fa més fred', 'Perquè hi viuen pingüins', 'Perquè hi ha rius'], why: 'Al pol Nord només hi ha aigües gelades; l\'Antàrtida és terra coberta de gel.' },
+
+ // Península Ibèrica
+ { t: 'iberia', q: 'Entre quines latituds es troba la Península Ibèrica?', options: ['Entre els 44º i 36º N', 'Entre els 50º i 70º N', 'Entre els 23º i 35º S', 'Entre els 0º i 10º N'], why: 'És a la zona temperada de l\'hemisferi nord.' },
+ { t: 'iberia', q: 'Com s\'anomena l\'altiplà central de la Península?', options: ['La Meseta', 'La Depressió de l\'Ebre', 'El Sistema Ibèric', 'Sierra Morena'], why: 'És una península massissa i elevada amb un altiplà central, "la Meseta".' },
+ { t: 'iberia', q: 'Quina serralada és el bord sud del massís central, amb importants recursos miners?', options: ['Sierra Morena', 'La Serralada Cantàbrica', 'Els Pirineus', 'Els Monts de Lleó'], why: 'Sierra Morena tanca el massís central pel sud.' },
+ { t: 'iberia', q: 'Quin és el cim més alt de la Península Ibèrica?', options: ['El Mulhacén', 'L\'Aneto', 'La Pica d\'Estats', 'El Puigmal'], why: 'El Mulhacén, a Sierra Nevada (Penibètiques), fa 3.478 m. L\'Aneto (3.404 m) és el cim més alt dels Pirineus.' },
+ { t: 'iberia', q: 'Quina depressió és molt tancada i àrida, amb bon aprofitament pel regadiu?', options: ['La depressió de l\'Ebre', 'La depressió del Guadalquivir', 'La depressió del Sado-Tajo', 'La Submeseta sud'], why: 'La del Guadalquivir, en canvi, està oberta a l\'Atlàntic i té millor irrigació.' },
+ { t: 'iberia', q: 'Quines són les tres regions biogeogràfiques de la Península i les illes?', options: ['Eurosiberiana, mediterrània i macaronèsica', 'Atlàntica, cantàbrica i bètica', 'Humida, seca i tropical', 'Pirinenca, central i litoral'], why: 'La macaronèsica només es troba a les illes Canàries.' },
+ { t: 'iberia', q: 'Quins arbres caracteritzen el bosc caducifoli de la regió eurosiberiana?', options: ['El faig i el roure', 'L\'alzina i el pi', 'Els llorers', 'L\'olivera i el garrofer'], why: 'A la regió mediterrània predominen l\'alzina, el pi i la surera.' },
+ { t: 'iberia', q: 'Quina massa d\'aire provoca les "onades de xafogor" a l\'estiu?', options: ['La massa d\'aire tropical saharià', 'La massa polar marina', 'La massa polar continental i àrtica', 'L\'anticicló de les Açores'], why: 'Procedeix d\'Àfrica i afecta la meitat sud a l\'estiu.' },
+ { t: 'iberia', q: 'Què actua com un tap per als fronts atlàntics, sobretot a l\'estiu?', options: ['L\'anticicló de les Açores', 'La massa polar marina', 'El mar Mediterrani', 'L\'altiplà central'], why: 'A l\'hivern l\'anticicló de les Açores es troba més al sud.' },
+ { t: 'iberia', q: 'On es troba la Ibèria semiàrida?', options: ['Al sud-est peninsular', 'A Galícia', 'Als Pirineus', 'A la Serralada Cantàbrica'], why: 'És una varietat extrema del clima mediterrani: quasi no plou.' },
+ { t: 'iberia', q: 'Quin riu mediterrani és una excepció per la seva àmplia conca i gran cabal?', options: ['L\'Ebre', 'El Segura', 'El Xúquer', 'El Llobregat'], why: 'L\'Ebre té una àmplia conca, un cabal important i forma un delta.' },
+ { t: 'iberia', q: 'Quina és la zona més àrida de tot Europa?', options: ['El cap de Gata', 'Els Monegros', 'La Meseta', 'El delta de l\'Ebre'], why: 'La Península va de la humitat de les fagedes cantàbriques fins a l\'aridesa del cap de Gata.' },
+
+ // Catalunya
+ { t: 'catalunya', q: 'Quines són les tres grans unitats del relleu català?', options: ['Els Pirineus, la Depressió Central i les Serralades Costaneres', 'La Meseta, el Sistema Ibèric i les Bètiques', 'L\'Empordà, el delta de l\'Ebre i la Transversal', 'El Cadí, el Montseny i el Garraf'], why: 'Unitats menors: la Serralada Transversal, la plana de l\'Empordà i el delta de l\'Ebre.' },
+ { t: 'catalunya', q: 'Quin és el pic més alt del Pirineu axial?', options: ['L\'Aneto', 'La Pica d\'Estats', 'El Puigmal', 'El Canigó'], why: 'L\'Aneto fa 3.404 m; la Pica d\'Estats, 3.143 m.' },
+ { t: 'catalunya', q: 'A quina serra prepirinenca es troba el Pedraforca?', options: ['A la serra del Cadí', 'Al Montseny', 'A la serra de Collserola', 'Al massís del Garraf'], why: 'Les serres interiors del Prepirineu inclouen el Cadí, amb el Pedraforca.' },
+ { t: 'catalunya', q: 'A quina serralada pertanyen el Montseny i Montserrat?', options: ['A la Serralada Prelitoral', 'A la Serralada Litoral', 'A la Serralada Transversal', 'Al Pirineu axial'], why: 'La Prelitoral inclou les Guilleries, el Montseny, Sant Llorenç del Munt, Montserrat, Prades i el Montsant.' },
+ { t: 'catalunya', q: 'Quines comarques formen la plana litoral?', options: ['El Maresme, el Barcelonès i el Baix Llobregat', 'La Segarra, l\'Urgell i les Garrigues', 'La Selva i els Vallès', 'La Cerdanya i el Ripollès'], why: 'És la franja costanera comprimida entre la Serralada Litoral i el mar.' },
+ { t: 'catalunya', q: 'On destaca el vulcanisme a Catalunya?', options: ['A la Serralada Transversal (Garrotxa)', 'Al Pirineu axial', 'Al delta de l\'Ebre', 'A la Depressió Central'], why: 'Els volcans més coneguts són Santa Margarida, el Croscat i el Montsacopa.' },
+ { t: 'catalunya', q: 'Quin massís separa l\'Alt i el Baix Empordà?', options: ['El Montgrí', 'El Garraf', 'El Cadí', 'Les Gavarres'], why: 'La plana de l\'Empordà era un antic golf, avui emergit.' },
+ { t: 'catalunya', q: 'Per què el delta de l\'Ebre està en regressió?', options: ['Per la manca de sediments retinguts pels pantans i per la dinàmica litoral', 'Per l\'augment de les pluges', 'Per l\'activitat volcànica', 'Per la tala de boscos'], why: 'Els nombrosos pantans de la conca retenen els sediments del riu.' },
+ { t: 'catalunya', q: 'Entre quines poblacions s\'estén la Costa Brava?', options: ['De Begur a Blanes', 'De Calafell a Salou', 'De Castelldefels a Vilanova i la Geltrú', 'Del cap de Creus a Roses'], why: 'El massís de les Gavarres arriba al mar i crea cales, badies i penya-segats.' },
+ { t: 'catalunya', q: 'Quin és l\'únic riu català que desemboca a l\'oceà Atlàntic?', options: ['El Garona', 'El Segre', 'El Ter', 'El Llobregat'], why: 'El Garona neix a la Vall d\'Aran i va cap a França.' },
+ { t: 'catalunya', q: 'Quin riu rep les aigües del Cardener?', options: ['El Llobregat', 'El Ter', 'El Segre', 'El Fluvià'], why: 'El Llobregat rep el Cardener a la Depressió Central i desemboca al costat de Montjuïc.' },
+ { t: 'catalunya', q: 'Quin riu neix a Ulldeter i travessa la Plana de Vic?', options: ['El Ter', 'El Llobregat', 'La Muga', 'El Segre'], why: 'El Ter rep el Freser a Ripoll i l\'Onyar a Girona, i desemboca al costat del Montgrí.' }
 ];
-const QUIZ_LEN = 10;
+const quizThemes = [
+ { id: 'tots', name: 'Tots els temes' },
+ { id: 'conceptes', name: 'Ecosistemes i conceptes' },
+ { id: 'biomes', name: 'Biomes' },
+ { id: 'continents', name: 'Continents' },
+ { id: 'iberia', name: 'Península Ibèrica' },
+ { id: 'catalunya', name: 'Catalunya' }
+];
+const QUIZ_LEN = 15;
+let quizTheme = 'tots';
 let quizQuestions = [];
 let quizIdx = 0;
 let score = 0;
 
+function initQuizFilters() {
+ const qf = document.getElementById('quizFilters');
+ quizThemes.forEach(th => {
+  const n = quizBank.filter(q => th.id === 'tots' || q.t === th.id).length;
+  const p = document.createElement('button');
+  p.type = 'button';
+  p.className = 'pill' + (th.id === quizTheme ? ' active' : '');
+  p.textContent = `${th.name} (${n})`;
+  p.addEventListener('click', () => {
+   qf.querySelectorAll('.pill').forEach(el => el.classList.remove('active'));
+   p.classList.add('active');
+   quizTheme = th.id;
+   initQuiz();
+  });
+  qf.appendChild(p);
+ });
+}
+
 function initQuiz() {
- quizQuestions = shuffle(quizBank).slice(0, QUIZ_LEN);
+ quizQuestions = shuffle(quizBank.filter(q => quizTheme === 'tots' || q.t === quizTheme)).slice(0, QUIZ_LEN);
  quizIdx = 0;
  score = 0;
  document.getElementById('quizResult').style.display = 'none';
