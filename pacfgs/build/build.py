@@ -232,5 +232,6 @@ s = rep(s, "</style>", """.nota{display:flex;flex-direction:column;gap:10px}
 .n-ok{color:var(--ok)}.n-mid{color:var(--gold)}.n-bad{color:var(--bad)}
 </style>""")
 
+exec(open(__import__('os').path.join(sys.argv[3],'desk_part.py'),encoding='utf-8').read())
 open(OUT, 'w', encoding='utf-8').write(s)
 print('ok', len(s), 'new cards', len(new_cards), 'topics', len(DECK['topics']), 'cards', len(DECK['cards']))

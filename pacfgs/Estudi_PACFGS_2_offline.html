@@ -42,7 +42,7 @@ p{margin:0}
 
 /* ---------- barra de pestañas ---------- */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--sheet);border-top:1px solid var(--rule);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
-.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
 .tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:12px;font-weight:700;color:var(--ink-2);border-radius:6px}
 .tabs button svg{width:24px;height:24px}
 .tabs button[aria-current="page"]{color:var(--ink)}
@@ -231,6 +231,38 @@ textarea.field{width:100%;min-height:120px;font-family:var(--f-mono);font-size:1
 .nparts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .nparts b{display:block;font-family:var(--f-display);font-size:1.5rem}
 .n-ok{color:var(--ok)}.n-mid{color:var(--gold)}.n-bad{color:var(--bad)}
+:root{--s-org:#9A5B12;--s-esc:#6B5E4A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--s-org:#E3A85A;--s-esc:#C2B49A}}
+:root[data-theme="dark"]{--s-org:#E3A85A;--s-esc:#C2B49A}
+.ar-f{display:flex;flex-wrap:wrap;gap:6px}
+.ar-f button{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);background:var(--sheet);border-radius:6px;padding:6px 10px;font-size:14px;font-weight:700}
+.ar-f button i{width:9px;height:9px;border-radius:2px;background:var(--c)}
+.ar-f button span{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
+.ar-f button[aria-pressed="true"]{border-color:var(--c);box-shadow:inset 0 -3px 0 var(--c)}
+.ar-sec{border-top:4px solid var(--c)}
+.ar-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding-bottom:6px}
+.ar-h h2{font-size:1.5rem}.ar-h span{font-size:13.5px}
+.ar-tool{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 20px;align-items:center;width:100%;text-align:left;padding:14px 0;border-top:1px solid var(--rule-soft)}
+.ar-tool>*{grid-column:1}
+.ar-tool b{font-family:var(--f-display);font-size:1.2rem}
+.ar-d{color:var(--ink-2);font-size:15px;max-width:62ch}
+.ar-s{color:var(--ink-2);font-size:13px}
+.ar-go{grid-column:2;grid-row:1 / span 4;font-weight:700;font-size:14px;border:1.5px solid var(--ink);border-radius:4px;padding:8px 12px;white-space:nowrap}
+.ar-tool:hover .ar-go{background:var(--ink);color:var(--sheet)}
+.ar-sim{display:block;width:100%;text-align:left;margin-top:8px;border:1px dashed var(--c);border-radius:4px;padding:9px 12px;font-weight:700;font-size:14px}
+.ar-sim:hover{border-style:solid}
+@media (max-width:520px){.ar-tool{grid-template-columns:1fr}.ar-go{grid-column:1;grid-row:auto;justify-self:start;margin-top:8px}}
+/* escritorio: las pestañas pasan a una barra lateral */
+@media (min-width:900px){
+  .tabs{top:0;right:auto;width:212px;border-top:0;border-right:1px solid var(--rule);padding:28px 12px}
+  .tabs .in{display:flex;flex-direction:column;gap:4px;max-width:none}
+  .tabs .in::before{content:"Estudi PACFGS";font-family:var(--f-display);font-weight:800;font-size:1.35rem;letter-spacing:-.02em;padding:0 12px 18px}
+  .tabs button{flex-direction:row;justify-content:flex-start;gap:12px;font-size:15.5px;padding:11px 12px;border-radius:8px}
+  .tabs button:hover{background:var(--bg)}
+  .tabs button[aria-current="page"]{background:var(--bg)}
+  body:has(#tabs:not([hidden])){padding-left:212px}
+  .view{padding-block:28px 56px}
+}
 </style>
 
 </head><body>
@@ -240,6 +272,7 @@ textarea.field{width:100%;min-height:120px;font-family:var(--f-mono);font-size:1
   <button data-tab="hoy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/></svg>Hoy</button>
   <button data-tab="mat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10"/></svg>Materias</button>
   <button data-tab="retos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Entrenar</button>
+  <button data-tab="arch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 10h18"/></svg>Archivador</button>
   <button data-tab="logros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M8.5 13 7 21l5-2.5L17 21l-1.5-8"/></svg>Progreso</button>
 </div></nav>
 
@@ -825,7 +858,7 @@ function floatXP(n){if(!n)return;const el=document.createElement('div');el.class
 const buzz=ms=>{try{navigator.vibrate&&navigator.vibrate(ms);}catch(e){}};
 
 /* ---------- navegación ---------- */
-function setTab(t){TAB=t;if(S&&S.tm)clearInterval(S.tm);S=null;dock.hidden=true;tabsEl.hidden=false;tabsEl.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===t?'page':'false'));({hoy,mat:materias,retos,logros})[t]();window.scrollTo(0,0);}
+function setTab(t){TAB=t;if(S&&S.tm)clearInterval(S.tm);S=null;dock.hidden=true;tabsEl.hidden=false;tabsEl.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===t?'page':'false'));({hoy,mat:materias,retos,arch:archivador,logros})[t]();window.scrollTo(0,0);}
 tabsEl.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
 const icons={bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>',
  star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>',
@@ -962,6 +995,31 @@ function retos(){
   document.getElementById('fl').onclick=()=>run(shuffle(DECK.cards).slice(0,15),{title:'Al azar',back});
 }
 
+/* ---------- Archivador: todas las herramientas por materia (como la versión de escritorio) ---------- */
+const ARCH=[
+  {id:'org',n:'Plan y simulacros',short:'Plan y examen',c:'--s-org',when:'Organización del curso y modo examen'},
+  {id:'mat',n:'Matemàtiques',c:'--s-mat',when:'Lunes y jueves, presencial'},
+  {id:'ang',n:'Anglès',c:'--s-ang',when:'Lunes y miércoles, presencial · English File Pre-int.'},
+  {id:'cas',n:'Castellà',c:'--s-cas',when:'Martes, presencial'},
+  {id:'cat',n:'Català',c:'--s-cat',when:'Martes y miércoles, presencial'},
+  {id:'geo',n:'Geografia',c:'--s-geo',when:'Online IOC · sesión del sábado'},
+  {id:'psi',n:'Psicologia i Sociologia',short:'Psicologia',c:'--s-psi',when:'Online IOC · sesión del sábado'},
+  {id:'esc',n:'Letra y velocidad',c:'--s-esc',when:'10–15 min al día · para el examen escrito'}];
+function archivador(){
+  const f=st.archF&&ARCH.some(a=>a.id===st.archF)?st.archF:'all';
+  const list=f==='all'?ARCH:ARCH.filter(a=>a.id===f);
+  const row=(t,a)=>{const others=t.subj.filter(x=>x!==a.id).map(x=>(ARCH.find(y=>y.id===x)||{}).short||(ARCH.find(y=>y.id===x)||{}).n).filter(Boolean);
+    return `<button class="ar-tool" data-tool="${t.id}"><span class="lbl">${esc(t.kind)}</span><b>${esc(t.name)}</b><span class="ar-d">${esc(t.desc)}</span>${others.length&&f!=='all'?`<span class="ar-s">También en ${esc(others.join(', '))}</span>`:''}<span class="ar-go">${t.pdf?'Ver cuaderno':'Abrir'} →</span></button>`;};
+  app.innerHTML=`<div class="view"><div class="hello"><div><p class="lbl">${TOOLS.length} herramientas · juegos, mapas, ejercicios y cuadernos</p><h1>Archivador</h1></div></div>
+   <div class="ar-f"><button data-af="all" aria-pressed="${f==='all'}" style="--c:var(--ink)">Todo <span>${TOOLS.length}</span></button>${ARCH.map(a=>`<button data-af="${a.id}" aria-pressed="${f===a.id}" style="--c:var(${a.c})"><i></i>${esc(a.short||a.n)} <span>${toolsOf(a.id).length}</span></button>`).join('')}</div>
+   ${list.map(a=>{const ts=f==='all'&&a.id!=='org'?toolsOf(a.id).filter(t=>!t.subj.includes('org')):toolsOf(a.id);if(!ts.length)return '';
+     return `<section class="panel ar-sec" style="--c:var(${a.c})"><div class="ar-h"><h2>${esc(a.n)}</h2><span class="muted">${esc(a.when)}</span></div>
+     ${ts.map(t=>row(t,a)).join('')}${EXAMS2.includes(a.id)?`<button class="ar-sim" data-sim="${a.id}">Simulacro cronometrado de ${esc(a.short||a.n)} →</button>`:''}</section>`;}).join('')}</div>`;
+  app.querySelectorAll('[data-af]').forEach(b=>b.onclick=()=>{st.archF=b.dataset.af;save();archivador();});
+  app.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>openTool(b.dataset.tool));
+  app.querySelectorAll('[data-sim]').forEach(b=>b.onclick=()=>openTool('examen',b.dataset.sim));
+  window.scrollTo(0,0);
+}
 /* ---------- Logros ---------- */
 function logros(){
   const lv=level(st.xp),a=lvlXp(lv),b=lvlXp(lv+1);
